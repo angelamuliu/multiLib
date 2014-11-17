@@ -10,6 +10,8 @@ app.use(morgan('tiny'));
 // Other modules
 var fs = require('fs');
 
+// -------------------------------------------------
+
 // Set view directory
 app.set('views', __dirname+'/views');
 app.set('view engine', 'ejs');
@@ -21,11 +23,13 @@ var httpServer = http.Server(app);
 var io = sio(httpServer);
 httpServer.listen(50000, function() {console.log('Listening on 50000');});
 
+// -------------------------------------------------
+// ROUTES / SOCKETIO
+
 var libRoutes = require('./routes/libRoutes.js');
-libRoutes.loadTemplates(fs);
-
-
 var gameSockets = require('./routes/serverSocket.js');
-gameSockets.init(io);
 
+// Load in the lib templates from the JSON file once when server starts
+libRoutes.loadTemplates(fs);
 app.get("/lib/", libRoutes.getAllLibs);
+gameSockets.init(io);
