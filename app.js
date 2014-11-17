@@ -7,6 +7,9 @@ var app = express();
 var sio = require('socket.io');
 app.use(morgan('tiny'));
 
+// Other modules
+var fs = require('fs');
+
 // Set view directory
 app.set('views', __dirname+'/views');
 app.set('view engine', 'ejs');
@@ -18,6 +21,11 @@ var httpServer = http.Server(app);
 var io = sio(httpServer);
 httpServer.listen(50000, function() {console.log('Listening on 50000');});
 
+var libRoutes = require('./routes/libRoutes.js');
+libRoutes.loadTemplates(fs);
+
 
 var gameSockets = require('./routes/serverSocket.js');
 gameSockets.init(io);
+
+app.get("/lib/", libRoutes.getAllLibs);

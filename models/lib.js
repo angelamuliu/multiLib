@@ -6,8 +6,9 @@
 
 var lib_collection = [];
 
-exports.loadTemplates = function(jsonfile_loc) {
-	var jsondat = JSON.parse(jsonfile_loc);
+exports.loadTemplates = function(jsonfile) {
+	console.log(jsonfile);
+	var jsondat = JSON.parse(jsonfile);
 	lib_collection = jsondat.libs;
 }
 
@@ -18,4 +19,8 @@ exports.getLib = function(id) {
 	} else {
 		return null;
 	}
+}
+
+exports.getAllLibs = function() {
+	return lib_collection;
 }
