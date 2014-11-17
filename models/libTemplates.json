@@ -1,0 +1,23 @@
+{
+	"libs":
+	[
+		{
+			"id": 0,
+			"title": "Test madlib",
+			"body": 
+				["This is a test mad lib. It is very ", 
+				"$ADJ",
+				" strangely structured. I really love ",
+				"$NOUN" ]
+		},
+
+		{
+			"id": 1,
+			"title": "Test 2",
+			"body": 
+				["Strange, how ",
+				"$P_NOUN",
+				"work!"]
+		}
+	]
+}
