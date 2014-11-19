@@ -1,5 +1,5 @@
-var player = require("../models/player.js");
-var players = [];
+var Player = require("../models/player.js");
+var playerCollection = require("../models/playercollection.js");
 
 exports.init = function(io) {
 	var currentPlayers = 0; // keep track of the number of players
@@ -8,13 +8,11 @@ exports.init = function(io) {
 	io.sockets.on('connection', function (socket) {
 		++currentPlayers;
 		// Send ("emit") a 'players' event back to the socket that just connected.
+		playerCollection.createPlayer(socket.id);
 
-		var newplayer = new player(socket.id);
-		players.push(newplayer);
-		console.log(players);
-		console.log(players.length);
+		var players = playerCollection.getAllPlayers();
 
-		socket.emit('players', { number: currentPlayers, players: players});
+		socket.emit('players', { number: currentPlayers, players: players });
 		// Send a welcome message to the new player
 		socket.emit('welcome', {message: "Welcome player "+currentPlayers + " " + socket.id, id: socket.id})
 
@@ -32,6 +30,7 @@ exports.init = function(io) {
 		 */
 		socket.on('disconnect', function () {
 			--currentPlayers;
+			playerCollection.deletePlayer(socket.id);
 			socket.broadcast.emit('players', { number: currentPlayers});
 		});
 	});

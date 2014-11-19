@@ -31,5 +31,6 @@ var gameSockets = require('./routes/serverSocket.js');
 
 // Load in the lib templates from the JSON file once when server starts
 libRoutes.loadTemplates(fs);
+
 app.get("/lib/", libRoutes.getAllLibs);
 gameSockets.init(io);

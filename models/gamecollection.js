@@ -1,9 +1,8 @@
 
 // Gamecollection model
 // Keeps track of all games as a collection
-// var Game = require("./game.js");
 
-var Game = require("./models/game.js");
+var Game = require("./game.js");
 
 var game_collection = [];
 
