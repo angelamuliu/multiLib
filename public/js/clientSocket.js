@@ -9,6 +9,18 @@ socket.on('players', function (data) {
 	});
 
 socket.on('welcome', function (data) {
-	console.log(data);
 	$("p#welcome").text(data.message);
 })
+
+socket.on('update game list', function(data) {
+	$("div#gamelist").empty();
+	for (var i=0; i<data.games.length; i++) {
+		$("div#gamelist").append("<p>" + data.games[i] + "</p>");
+	}
+})
+
+$(document).ready(function() {
+	$("#makeGame").click(function() {
+		socket.emit("create game");
+	})
+});

@@ -11,6 +11,9 @@
   	HI!! THIS IS A ATEST LIB PAGE!!!
     <% /* This is an example of a comment that visitors won't see b/c it is serverside */ %>
 
+    	<% // You can render partials, see below %>
+	<% include ../game/test %>
+
 <% for (var i=0; i<allLibs.length; i++) { %>
 	<p><%= allLibs[i].body %></p>
 <% } %>
