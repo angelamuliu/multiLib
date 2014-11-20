@@ -29,18 +29,53 @@ httpServer.listen(50000, function() {console.log('Listening on 50000');});
 
 var libRoutes = require('./routes/libRoutes.js');
 var gameRoutes = require('./routes/gameRoutes.js');
-var gameSockets = require('./routes/serverSocket.js');
+var playerCollection = require('./models/playercollection.js');
 
 // Load in the lib templates from the JSON file once when server starts
 libRoutes.loadTemplates(fs);
 
-// Initialize serverside sockets to keep track of players
-gameSockets.init(io);
 
-// Set root to a game lobby
+
+
+
+
+
+io.sockets.on('connection', function (socket) {
+
+
+	var player = playerCollection.createPlayer(socket.id);
+
+	gameRoutes.refreshList(socket);
+
+	socket.on('disconnect', function () {
+		console.log("Disconnect");
+		playerCollection.deletePlayer(player);
+	});
+
+	socket.on('create game', function() {
+		console.log(player.getId());
+		gameRoutes.createGame(socket, player.getId());
+	});
+
+	socket.on('remove game', function() {
+		gameRoutes.removeGame(socket, player.getId());
+	});
+
+	socket.on("setup: update game", function(data) {
+		gameRoutes.update_setupgame(socket, player.getId(), data);
+	})
+
+})
+
+
+
+
+
 app.get("/", gameRoutes.renderLobby);
-
 app.get("/makeGame", gameRoutes.prepGame);
 
-// app.get("/makeGame", gameRoutes.makeGame);
 app.get("/lib/", libRoutes.getAllLibs);
+
+
+
+

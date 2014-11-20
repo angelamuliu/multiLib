@@ -8,20 +8,19 @@ socket.on('players', function (data) {
   }
 	});
 
-socket.on('welcome', function (data) {
-	$("p#welcome").text(data.message);
-})
 
 socket.on('update game list', function(data) {
+	console.log("Update!");
 	$("div#gamelist").empty();
 	for (var i=0; i<data.games.length; i++) {
-		$("div#gamelist").append("<p>" + data.games[i] + "</p>");
+		$("div#gamelist").append("<p>" + data.games[i].name + "</p>");
 	}
 })
 
 $(document).ready(function() {
 
 	$("#makeGame").click(function() {
+		console.log("CREATE");
 		socket.emit("create game");
 	})
 

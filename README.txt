@@ -6,3 +6,6 @@ RESOURCES
 -------------------------------------------------
 Exporting modules
 http://www.sitepoint.com/understanding-module-exports-exports-node-js/
+
+Getting clients in a room
+http://stackoverflow.com/questions/6563885/socket-io-how-do-i-get-a-list-of-connected-sockets-clients

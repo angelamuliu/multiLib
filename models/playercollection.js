@@ -6,15 +6,16 @@ var Player = require('./player.js');
 
 var player_collection = [];
 
-exports.createPlayer = function(socket_id) {
-	var newplayer = new Player(socket_id);
+exports.createPlayer = function(player_id) {
+	var newplayer = new Player(player_id);
 	player_collection.push(newplayer);
+	return newplayer;
 }
 
-exports.deletePlayer = function(socket_id) {
+exports.deletePlayer = function(player) {
 	for (var i=0; i<player_collection.length; i++) {
 		var player = player_collection[i];
-		if (player.getId() === socket_id) {
+		if (player.getId() === player.getId()) {
 			player_collection .splice(i,1);
 			return true;
 		}

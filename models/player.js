@@ -11,8 +11,4 @@ Player.prototype.getId = function() {
 	return this.id;
 }
 
-Player.prototype.test = function() {
-	return "TEST!";
-}
-
 module.exports = Player;

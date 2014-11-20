@@ -9,6 +9,7 @@ var game_collection = [];
 exports.createGame = function(host_id) {
 	var newGame = new Game(host_id);
 	game_collection.push(newGame);
+	return newGame;
 }
 
 exports.getGame = function(host_id) {
@@ -17,9 +18,11 @@ exports.getGame = function(host_id) {
 	for (var i=0; i<game_collection.length; i++) {
 		var viewedGame = game_collection[i];
 		if (viewedGame.host_id === host_id) {
+			console.log("FOUND!");
 			return viewedGame;
 		}
 	}
+	console.log("Nope.");
 	return null;
 }
 

@@ -36,7 +36,10 @@
   }
 
   $('.required').change(function() {
+    console.log("changed");
     checkFields();
+    socket.emit("setup: update game", {name: $("input[name=gameName]").val(), lib: "TEST"});
+    socket.emit("update game list");
   });
 </script>
 
