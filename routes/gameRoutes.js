@@ -1,49 +1,29 @@
 
-var gameCollection = require("../models/gamecollection.js");
+var playerModel = require("../models/player.js");
+var gameModel = require("../models/game.js");
+var game;
 
 exports.renderLobby = function(req, res) {
-	var games = gameCollection.getAllGames();
-	res.render("game/game_lobby", {"games" : games});
+	res.render("game/game_lobby");
 }
 
 exports.prepGame = function(socket, libs) {
-	var prepGame = gameCollection.getNewestGame();
+	console.log("?????");
 	socket.emit('setup game', {libs: libs});
 }
 
-exports.connectToGame = function(socket) {
-
-}
-
-exports.createGame = function(socket, player_id) {
-	gameCollection.createGame(player_id);
-	var games = gameCollection.getAllGames();
-	socket.broadcast.emit('update game list', {games: games});
+exports.createGame = function(socket, name, libId, host, players) {
+	console.log("CREATE!");
+	game = new Game(host.getId());
+	game.updateName(name);
+	game.updateLib(libId);
+	for (var i=0; i<players.length; i++) {
+		game.addPlayer(players[i].getId());
+	}
 }
 
 exports.removeGame = function(socket, player_id) {
 	gameCollection.deleteGame(player_id);
 	var games = gameCollection.getAllGames();
 	socket.broadcast.emit('update game list', {games: games});
-}
-
-exports.update_setupgame = function(socket, player_id, data) {
-	console.log(player_id);
-	var currgame = gameCollection.getGame(player_id);
-}
-
-exports.init = function(io) {
-io.sockets.on('connection', function (socket) {
-	socket.broadcast.emit('update game list', {games: gameCollection.getAllGames()});
-
-
-	// During game setup, push changes so everyone can see
-	socket.on("setup: update game", function(data) {
-		console.log(player_id);
-		var currgame = gameCollection.getGame(player_id);
-		currgame.updateName(data.name);
-		currgame.updateLib(data.lib);
-		socket.broadcast.emit('update game list', {games: gameCollection.getAllGames()});
-	})
-})
 }

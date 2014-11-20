@@ -18,11 +18,9 @@ exports.getGame = function(host_id) {
 	for (var i=0; i<game_collection.length; i++) {
 		var viewedGame = game_collection[i];
 		if (viewedGame.host_id === host_id) {
-			console.log("FOUND!");
 			return viewedGame;
 		}
 	}
-	console.log("Nope.");
 	return null;
 }
 

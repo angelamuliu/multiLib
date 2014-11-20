@@ -35,46 +35,40 @@ var playerCollection = require('./models/playercollection.js');
 libModel.loadJSON(fs);
 
 var playerCount = 0;
+var host;
 
 
 io.sockets.on('connection', function (socket) {
+
 	playerCount += 1;
-
-	// First player to connect can setup the game
-	if (playerCount === 1) {
-		gameRoutes.prepGame(socket, libModel.getAllLibs());
-	} else {
-		gameRoutes.connectToGame(socket);
-	}
-
 	var player = playerCollection.createPlayer(socket.id);
 
+	// First player to connect can setup the game and is set as the host
+	if (playerCount === 1) {
+		gameRoutes.prepGame(socket, libModel.getAllLibs());
+		host = player;
+	}
+
 	socket.on('disconnect', function () {
+		if (host === player) {
+			// Do something special
+		}
 		playerCount -= 1;
 		playerCollection.deletePlayer(player);
 	});
 
-	socket.on('create game', function() {
-		console.log(player.getId());
-		gameRoutes.createGame(socket, player.getId());
+	socket.on('Create Game', function(data) {
+		gameRoutes.createGame(socket, data.gamename, data.libId, host, players);
 	});
 
 	socket.on('remove game', function() {
 		gameRoutes.removeGame(socket, player.getId());
 	});
 
-	socket.on("setup: update game", function(data) {
-		gameRoutes.update_setupgame(socket, player.getId(), data);
-	})
-
 })
 
 
-
-
-
 app.get("/", gameRoutes.renderLobby);
-app.get("/makeGame", gameRoutes.prepGame);
 
 
 
