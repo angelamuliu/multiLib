@@ -16,7 +16,7 @@ exports.deletePlayer = function(player) {
 	for (var i=0; i<player_collection.length; i++) {
 		var player = player_collection[i];
 		if (player.getId() === player.getId()) {
-			player_collection .splice(i,1);
+			player_collection.splice(i,1);
 			return true;
 		}
 	}

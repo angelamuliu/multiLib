@@ -35,35 +35,51 @@ var playerCollection = require('./models/playercollection.js');
 libModel.loadJSON(fs);
 
 var playerCount = 0;
+var game;
 var host;
-
+var ingame = false;
 
 io.sockets.on('connection', function (socket) {
 
 	playerCount += 1;
+	console.log(playerCount);
 	var player = playerCollection.createPlayer(socket.id);
 
 	// First player to connect can setup the game and is set as the host
 	if (playerCount === 1) {
 		gameRoutes.prepGame(socket, libModel.getAllLibs());
 		host = player;
+		game = gameRoutes.createGame(socket, host);
 	}
 
 	socket.on('disconnect', function () {
-		if (host === player) {
-			// Do something special
-		}
 		playerCount -= 1;
 		playerCollection.deletePlayer(player);
+		if (host === player) {
+			// Reassign who is host
+			host = playerCollection.getAllPlayers[0];
+			gameRoutes.removeGame(socket, player.getId());
+		}
 	});
 
 	socket.on('Create Game', function(data) {
-		gameRoutes.createGame(socket, data.gamename, data.libId, host, players);
+		ingame = true;
+		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
+		socket.emit('render host view', {game: game});
+		socket.broadcast.emit('render player view', {game: game});
 	});
 
 	socket.on('remove game', function() {
 		gameRoutes.removeGame(socket, player.getId());
 	});
+
+	socket.on('NOUN', function() {
+		console.log("NOUN");
+	})
+
+	socket.on("ADJ", function() {
+		console.log("ADJ");
+	})
 
 })
 

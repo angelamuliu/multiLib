@@ -1,29 +1,34 @@
 
 var playerModel = require("../models/player.js");
-var gameModel = require("../models/game.js");
+var Game = require("../models/game.js");
 var game;
 
 exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby");
 }
 
+// Host is given this event to set up initial game values
 exports.prepGame = function(socket, libs) {
-	console.log("?????");
 	socket.emit('setup game', {libs: libs});
 }
 
-exports.createGame = function(socket, name, libId, host, players) {
+// Create a default game
+exports.createGame = function(socket, host) {
 	console.log("CREATE!");
 	game = new Game(host.getId());
+	return game;
+}
+
+// Called after values have been validated clientside, initialize game
+exports.initGame = function(socket, game, name, libId, host, players, libs) {
 	game.updateName(name);
 	game.updateLib(libId);
+	game.updateLibBody(libs[game.getLibId()].body);
 	for (var i=0; i<players.length; i++) {
 		game.addPlayer(players[i].getId());
 	}
 }
 
 exports.removeGame = function(socket, player_id) {
-	gameCollection.deleteGame(player_id);
-	var games = gameCollection.getAllGames();
-	socket.broadcast.emit('update game list', {games: games});
+	var game = null;
 }

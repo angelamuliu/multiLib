@@ -37,12 +37,20 @@ Game.prototype.updateLib = function(lib_id) {
 	this.lib_id = lib_id;
 }
 
+Game.prototype.getLibId = function() {
+	return this.lib_id;
+}
+
 Game.prototype.updateLibStr = function(lib_str) {
 	this.lib_str = lib_str;
 }
 
 Game.prototype.updateLibBody = function(lib_body) {
 	this.lib_body = lib_body;
+}
+
+Game.prototype.getLibBody = function() {
+	return this.lib_body;
 }
 
 Game.prototype.updateCurrWord = function(newWord) {
