@@ -34,26 +34,15 @@ var playerCollection = require('./models/playercollection.js');
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
 
-var playerCount = 0;
 var game;
 var host;
 var ingame = false;
 
 io.sockets.on('connection', function (socket) {
 
-	playerCount += 1;
-	console.log(playerCount);
 	var player = playerCollection.createPlayer(socket.id);
 
-	// First player to connect can setup the game and is set as the host
-	if (playerCount === 1) {
-		gameRoutes.prepGame(socket, libModel.getAllLibs());
-		host = player;
-		game = gameRoutes.createGame(socket, host);
-	}
-
 	socket.on('disconnect', function () {
-		playerCount -= 1;
 		playerCollection.deletePlayer(player);
 		if (host === player) {
 			// Reassign who is host
@@ -62,15 +51,25 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 
-	socket.on('Create Game', function(data) {
+	// Would be called if the host wanted to stop midway
+	socket.on('remove game', function() {
+		gameRoutes.removeGame(socket, player.getId());
+	});
+
+	// A player has clicked a button to be host, update host and other player views
+	socket.on('set host', function() {
+		host = player;
+		gameRoutes.prepGame(socket, libModel.getAllLibs());
+		game = gameRoutes.createGame(socket, host);
+		socket.broadcast.emit('wait for host');
+	})
+
+	// Initialize game w/ host's chosen values, update views to main game view
+	socket.on('Init Game', function(data) {
 		ingame = true;
 		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
 		socket.emit('render host view', {game: game});
 		socket.broadcast.emit('render player view', {game: game});
-	});
-
-	socket.on('remove game', function() {
-		gameRoutes.removeGame(socket, player.getId());
 	});
 
 	socket.on('NOUN', function() {

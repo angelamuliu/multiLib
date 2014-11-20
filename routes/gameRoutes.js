@@ -14,7 +14,6 @@ exports.prepGame = function(socket, libs) {
 
 // Create a default game
 exports.createGame = function(socket, host) {
-	console.log("CREATE!");
 	game = new Game(host.getId());
 	return game;
 }
