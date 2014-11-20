@@ -7,5 +7,7 @@ exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby", {"games" : games});
 }
 
-exports.makeGame = function(req, res) {
+exports.prepGame = function(req, res) {
+	var prepGame = gameCollection.getNewestGame();
+	res.render("game/make_game");
 }

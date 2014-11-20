@@ -20,7 +20,9 @@ socket.on('update game list', function(data) {
 })
 
 $(document).ready(function() {
+
 	$("#makeGame").click(function() {
 		socket.emit("create game");
 	})
+
 });

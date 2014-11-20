@@ -40,5 +40,7 @@ gameSockets.init(io);
 // Set root to a game lobby
 app.get("/", gameRoutes.renderLobby);
 
+app.get("/makeGame", gameRoutes.prepGame);
+
 // app.get("/makeGame", gameRoutes.makeGame);
 app.get("/lib/", libRoutes.getAllLibs);

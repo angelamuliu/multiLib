@@ -49,4 +49,8 @@ exports.getAllGames = function() {
 	return game_collection;
 }
 
+exports.getNewestGame = function() {
+	return game_collection[game_collection.length-1];
+}
+
 // TODO: Process params into a game obj

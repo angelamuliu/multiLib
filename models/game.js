@@ -6,7 +6,7 @@
 // A game object NEEDS a host_id, everything else initialized
 function Game(host_id) {
 	this.host_id = host_id;
-	this.name = "";
+	this.name = "Untitled";
 	this.players = [];
 	this.lib_id = 0;
 	this.lib_str = ""; // Final pieced together lib
