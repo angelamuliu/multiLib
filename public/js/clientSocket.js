@@ -1,14 +1,5 @@
 var socket = io.connect('/');
 
-socket.on('players', function (data) {
-  $("#numPlayers").text(data.number);
-  console.log(data.players);
-  for (var i=0; i<data.players.length; i++) {
-  	$("div#players").append("<p>"+ data.players[i] + "</p>");
-  }
-	});
-
-
 socket.on('update game list', function(data) {
 	console.log("Update!");
 	$("div#gamelist").empty();
@@ -16,6 +7,19 @@ socket.on('update game list', function(data) {
 		$("div#gamelist").append("<p>" + data.games[i].name + "</p>");
 	}
 })
+
+// Shown for first user, allows setup
+socket.on('setup game', function(data) {
+	$("div#record").empty();
+	$("div#record").append("<h1>Setup</h1>");
+	$("div#record").append("Game name: <input type=\"text\" name=\"gamename\"><br/>");
+	$("div#record").append("Select a lib: <select name=\"lib\">");
+	for (var i=0; i<data.libs.length; i++) {
+		$("div#record select").append("<option value=" + data.libs[i].id + ">" + data.libs[i].title + "</option>");
+	}
+	$("div#record").append("<button>Go!</button>");
+})
+
 
 $(document).ready(function() {
 
@@ -25,3 +29,4 @@ $(document).ready(function() {
 	})
 
 });
+

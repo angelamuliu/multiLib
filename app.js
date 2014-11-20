@@ -27,28 +27,30 @@ httpServer.listen(50000, function() {console.log('Listening on 50000');});
 // -------------------------------------------------
 // ROUTES / SOCKETIO
 
-var libRoutes = require('./routes/libRoutes.js');
+var libModel = require('./models/lib.js');
 var gameRoutes = require('./routes/gameRoutes.js');
 var playerCollection = require('./models/playercollection.js');
 
 // Load in the lib templates from the JSON file once when server starts
-libRoutes.loadTemplates(fs);
+libModel.loadJSON(fs);
 
-
-
-
-
+var playerCount = 0;
 
 
 io.sockets.on('connection', function (socket) {
+	playerCount += 1;
 
+	// First player to connect can setup the game
+	if (playerCount === 1) {
+		gameRoutes.prepGame(socket, libModel.getAllLibs());
+	} else {
+		gameRoutes.connectToGame(socket);
+	}
 
 	var player = playerCollection.createPlayer(socket.id);
 
-	gameRoutes.refreshList(socket);
-
 	socket.on('disconnect', function () {
-		console.log("Disconnect");
+		playerCount -= 1;
 		playerCollection.deletePlayer(player);
 	});
 
@@ -74,7 +76,6 @@ io.sockets.on('connection', function (socket) {
 app.get("/", gameRoutes.renderLobby);
 app.get("/makeGame", gameRoutes.prepGame);
 
-app.get("/lib/", libRoutes.getAllLibs);
 
 
 

@@ -6,15 +6,13 @@ exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby", {"games" : games});
 }
 
-exports.prepGame = function(req, res) {
+exports.prepGame = function(socket, libs) {
 	var prepGame = gameCollection.getNewestGame();
-	res.render("game/make_game");
+	socket.emit('setup game', {libs: libs});
 }
 
-exports.refreshList = function(socket) {
-	var games = gameCollection.getAllGames();
-	socket.emit('update game list', {games: games});
-	socket.broadcast.emit('update game list', {games: games});
+exports.connectToGame = function(socket) {
+
 }
 
 exports.createGame = function(socket, player_id) {

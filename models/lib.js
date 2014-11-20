@@ -6,12 +6,6 @@
 
 var lib_collection = [];
 
-exports.loadTemplates = function(jsonfile) {
-	console.log(jsonfile);
-	var jsondat = JSON.parse(jsonfile);
-	lib_collection = jsondat.libs;
-}
-
 exports.getLib = function(id) {
 	// Lib ids are set by the json file, id corresponds to place in collection
 	if (id < lib_collection.length) {
@@ -23,4 +17,16 @@ exports.getLib = function(id) {
 
 exports.getAllLibs = function() {
 	return lib_collection;
+}
+
+exports.loadJSON = function(fs) {
+	var jsonName = "models/libTemplates.json";
+	fs.readFile(jsonName, function(err, data) {
+		if(err) {
+			console.log(err);
+		} else {
+			var jsondat = JSON.parse(data);
+			lib_collection = jsondat.libs;
+		}
+	})
 }

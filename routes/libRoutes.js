@@ -14,5 +14,5 @@ exports.loadTemplates = function(fs) {
 
 exports.getAllLibs = function(req, res) {
 	var allLibs = libModel.getAllLibs();
-	res.render("lib/lib_listAllTemplates", {"allLibs" : allLibs});
+	return allLibs;
 }
