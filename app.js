@@ -47,13 +47,15 @@ io.sockets.on('connection', function (socket) {
 		if (host === player) {
 			// Reassign who is host
 			host = playerCollection.getAllPlayers[0];
-			gameRoutes.removeGame(socket, player.getId());
+			game = null;
+			socket.broadcast.emit('reset game');
 		}
 	});
 
 	// Would be called if the host wanted to stop midway
 	socket.on('remove game', function() {
-		gameRoutes.removeGame(socket, player.getId());
+		game = null;
+		socket.broadcast.emit('reset game');
 	});
 
 	// A player has clicked a button to be host, update host and other player views

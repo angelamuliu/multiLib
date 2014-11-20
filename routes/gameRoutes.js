@@ -1,7 +1,6 @@
 
 var playerModel = require("../models/player.js");
 var Game = require("../models/game.js");
-var game;
 
 exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby");
@@ -26,8 +25,4 @@ exports.initGame = function(socket, game, name, libId, host, players, libs) {
 	for (var i=0; i<players.length; i++) {
 		game.addPlayer(players[i].getId());
 	}
-}
-
-exports.removeGame = function(socket, player_id) {
-	var game = null;
 }

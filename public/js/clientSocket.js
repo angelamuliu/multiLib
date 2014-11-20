@@ -54,5 +54,12 @@ socket.on('render host view', function(data) {
 
 
 socket.on('reset game', function(data) {
-
+	$("div#record").empty();
+	$("div#playspace").empty();
+	$("div#record").append("The game host disappeared! Sorry about that. Someone pick up the ball!<br />");
+	$("div#record").append("<button onclick=\"setHost()\">Host a game!</botton>");
 })
+
+
+
+
