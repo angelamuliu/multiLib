@@ -92,8 +92,16 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.emit('open word input', {type: "NOUN", slotposition: slotposition});
 	})
 
-	socket.on("ADJ", function() {
-		console.log("ADJ");
+	socket.on("ADJ", function(data) {
+		gamestage = "waiting for word";
+		var slotposition = data.slotposition;
+		socket.emit('wait for word', {type: "ADJ", slotposition: slotposition, game: game});
+		socket.broadcast.emit('open word input', {type: "ADJ", slotposition: slotposition});
+	})
+
+	// Host clicked on a player submitted word, time to move on!
+	socket.on("choosen", function(data) {
+		gameRoutes.chooseWord(socket, game, data.choosenword, data.slotposition);
 	})
 
 	// ++++++++++++++++++++++

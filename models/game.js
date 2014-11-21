@@ -53,6 +53,17 @@ Game.prototype.getLibBody = function() {
 	return this.lib_body;
 }
 
+// Check if there are any unfilled word slots
+Game.prototype.emptySlots_inLibBody = function() {
+	for (var i=0; i<this.lib_body.length; i++) {
+		var viewed = this.lib_body[i];
+		if (viewed[0] === "$") {
+			return true;
+		}
+	}
+	return false;
+}
+
 Game.prototype.updateCurrWord = function(newWord) {
 	this.current_word = newWord;
 }

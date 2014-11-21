@@ -27,6 +27,23 @@ exports.initGame = function(socket, game, name, libId, host, players, libs) {
 	}
 }
 
+// A player has suggested a word for the host
 exports.addWord = function(socket, game, word) {
 	game.addPlayerWord(word);
+}
+
+// Host has chosen a word, now let's update the game and views!
+exports.chooseWord = function(socket, game, word, slotposition) {
+	// Update the lib body array
+	var updated_libBody = game.getLibBody();
+	updated_libBody[slotposition] = word;
+	game.updateLibBody(updated_libBody);
+	// Clear game player submitted words array for next round!
+	game.clearPlayerWords();
+	if (game.emptySlots_inLibBody()) {
+		socket.emit('render host view', {game: game});
+		socket.broadcast.emit('render player view', {game: game});
+	} else {
+		console.log("DONE!");
+	}
 }

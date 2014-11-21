@@ -18,28 +18,6 @@ socket.on('reset game', function(data) {
 // HOST SOCKETS
 // -------------------------------------------------
 
-// HOST: Create the main mad lib game interface, host view
-socket.on('render host view', function(data) {
-	$("div#record").empty();
-	$("div#record").append("<h3>" + data.game.name + "</h3>");
-	for (var i=0; i<data.game.lib_body.length; i++) {
-		var wordseg = data.game.lib_body[i];
-		if (wordseg[0] === "$") {
-			// Is a word slot, make button w/ id of type and position in lib array
-			$("div#record").append("<button id=\""+ i + wordseg.slice(1) + "\"></button>");
-			$("div#record button").last().append(wordseg.slice(1));
-		} else {
-			$("div#record").append("<p>" + data.game.lib_body[i] + "</p>");
-		}
-	}
-	// Attach click handlers to the slot buttons
-	$("div#record button").click( function() {
-		var slotposition = $(this).attr('id')[0];
-		var type = $(this).attr('id').slice(1);
-		socket.emit(type, {slotposition: slotposition});
-	})
-})
-
 // HOST: When a host is selected, render a form for game setup
 socket.on('setup game', function(data) {
 	$("div#record").empty();
@@ -59,18 +37,46 @@ socket.on('setup game', function(data) {
   	})
 })
 
+// HOST: Create the main mad lib game interface, host view
+socket.on('render host view', function(data) {
+	$("div#record").empty();
+	$("div#record").append("<h3>" + data.game.name + "</h3>");
+	for (var i=0; i<data.game.lib_body.length; i++) {
+		var wordseg = data.game.lib_body[i];
+		if (wordseg[0] === "$") {
+			// Is a word slot, make button w/ id of type and position in lib array
+			$("div#record").append("<button id=\""+ i + wordseg.slice(1) + "\"></button>");
+			$("div#record button").last().append(wordseg.slice(1));
+		} else {
+			$("div#record").append("<p>" + data.game.lib_body[i] + "</p>");
+		}
+	}
+	// Attach click handlers to the slot buttons, and sockets that relate to type of button
+	$("div#record button").click( function() {
+		var slotposition = $(this).attr('id')[0];
+		var type = $(this).attr('id').slice(1);
+		socket.emit(type, {slotposition: slotposition});
+	})
+})
+
 // HOST: Start a timer and wait for words from other players
 socket.on('wait for word', function(data) {
 	$("div#record").empty();
 	$("div#record").append("<p>Waiting for "+ data.type +" words from players...</p>");
-	$("div#record").append("Words so far:<br />");
+	$("div#record").append("<div id=\"inputwords\">Words so far:<br /></div>");
 	if (data.game.players_words.length <1) {
-		$("div#record").append("No words have come in yet.");
+		$("div#inputwords").append("No words have come in yet.");
 	} else {
 		for (var i=0; i<data.game.players_words.length; i++) {
-			$("div#record").append("<p>"+data.game.players_words[i]+"</p>");
+			$("div#inputwords").append("<button class=\"choosen\">"+data.game.players_words[i]+"</button>");
+			// $("div#inputwords").append("<p>"+data.game.players_words[i]+"</p>");
 		}
 	}
+	// Attach click handlers to player word input buttons
+	$("div#inputwords button").click( function() {
+		var input = $(this).text();
+		socket.emit("choosen", {slotposition: data.slotposition, choosenword: input});
+	})
 })
 
 // -------------------------------------------------
@@ -85,7 +91,8 @@ socket.on('wait for host', function() {
 
 // PLAYER: Create the main mad lib game interface, player view
 socket.on('render player view', function(data) {
-
+	$("div#record").empty();
+	$("div#record").append("<p>Host has choosen a lib. Keep on waiting.</p>");
 })
 
 // PLAYER: Update UI to allow word input
