@@ -9,7 +9,6 @@ function setHost() {
 // or left host
 socket.on('reset game', function(data) {
 	$("div#record").empty();
-	$("div#playspace").empty();
 	$("div#record").append("The game host disappeared! Sorry about that. Someone pick up the ball!<br />");
 	$("div#record").append("<button onclick=\"setHost()\">Host a game!</botton>");
 })
@@ -98,10 +97,9 @@ socket.on('render player view', function(data) {
 // PLAYER: Update UI to allow word input
 socket.on('open word input', function(data) {
 	$("div#record").empty();
-	$("div#playspace").empty();
 	$("div#record").append("The host is asking for a " + data.type + "!");
-	$("div#playspace").append("Toss a word in! <input type=\"text\" name=\"playerinput\"><br/>");
-	$("div#playspace").append("<button id=\"submit_word\">Go!</button>");
+	$("div#record").append("Toss a word in! <input type=\"text\" name=\"playerinput\"><br/>");
+	$("div#record").append("<button id=\"submit_word\">Go!</button>");
 	$("button#submit_word").click( function() {
 		var input = $("input[name=playerinput]").val();
 		if (input !== "") {
@@ -113,7 +111,6 @@ socket.on('open word input', function(data) {
 // PLAYER: Just submitted a word, now waiting for other users
 socket.on('you submitted', function(data) {
 	$("div#record").empty();
-	$("div#playspace").empty();
 	$("div#record").append("You submitted the word " + data.word + ", waiting for other players now...");
 })
 
