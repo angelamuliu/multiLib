@@ -48,6 +48,7 @@ io.sockets.on('connection', function (socket) {
 			// Reassign who is host
 			host = playerCollection.getAllPlayers[0];
 			game = null;
+			ingame = false;
 			socket.broadcast.emit('reset game');
 		}
 	});
@@ -64,23 +65,34 @@ io.sockets.on('connection', function (socket) {
 		gameRoutes.prepGame(socket, libModel.getAllLibs());
 		game = gameRoutes.createGame(socket, host);
 		socket.broadcast.emit('wait for host');
+		ingame = true;
 	})
 
 	// Initialize game w/ host's chosen values, update views to main game view
 	socket.on('Init Game', function(data) {
-		ingame = true;
 		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
 		socket.emit('render host view', {game: game});
 		socket.broadcast.emit('render player view', {game: game});
 	});
 
-	socket.on('NOUN', function() {
-		console.log("NOUN");
+	// ++++++++++++++++++++++
+	// HOST word slot sockets
+	// ++++++++++++++++++++++
+
+	socket.on('NOUN', function(data) {
+		var slotposition = data.slotposition;
+		socket.emit('wait for word', {type: "NOUN", slotposition: slotposition});
+		socket.broadcast.emit('open word input', {type: "NOUN"});
 	})
 
 	socket.on("ADJ", function() {
 		console.log("ADJ");
 	})
+
+	socket.on('submitted word', function(data) {
+		console.log(data.word);
+		gameRoutes.addWord(socket, game, data.word);
+	}) 
 
 })
 

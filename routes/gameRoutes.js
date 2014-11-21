@@ -26,3 +26,7 @@ exports.initGame = function(socket, game, name, libId, host, players, libs) {
 		game.addPlayer(players[i].getId());
 	}
 }
+
+exports.addWord = function(socket, game, word) {
+	game.addPlayerWord(word);
+}
