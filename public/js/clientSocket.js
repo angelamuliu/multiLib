@@ -62,7 +62,15 @@ socket.on('setup game', function(data) {
 // HOST: Start a timer and wait for words from other players
 socket.on('wait for word', function(data) {
 	$("div#record").empty();
-	$("div#record").append("<p>Waiting for words from players...</p>");
+	$("div#record").append("<p>Waiting for "+ data.type +" words from players...</p>");
+	$("div#record").append("Words so far:<br />");
+	if (data.game.players_words.length <1) {
+		$("div#record").append("No words have come in yet.");
+	} else {
+		for (var i=0; i<data.game.players_words.length; i++) {
+			$("div#record").append("<p>"+data.game.players_words[i]+"</p>");
+		}
+	}
 })
 
 // -------------------------------------------------
@@ -84,18 +92,22 @@ socket.on('render player view', function(data) {
 socket.on('open word input', function(data) {
 	$("div#record").empty();
 	$("div#playspace").empty();
-
 	$("div#record").append("The host is asking for a " + data.type + "!");
 	$("div#playspace").append("Toss a word in! <input type=\"text\" name=\"playerinput\"><br/>");
 	$("div#playspace").append("<button id=\"submit_word\">Go!</button>");
 	$("button#submit_word").click( function() {
 		var input = $("input[name=playerinput]").val();
 		if (input !== "") {
-			socket.emit('submitted word', {word: input});
+			socket.emit('submitted word', {word: input, type: data.type, slotposition: data.slotposition});
 		}
 	}) 
 })
 
+// PLAYER: Just submitted a word, now waiting for other users
+socket.on('you submitted', function() {
+	$("div#record").empty();
+	$("div#record").append("You submitted the word " + data.word + ", waiting for other players now...");
+})
 
 
 

@@ -81,8 +81,8 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('NOUN', function(data) {
 		var slotposition = data.slotposition;
-		socket.emit('wait for word', {type: "NOUN", slotposition: slotposition});
-		socket.broadcast.emit('open word input', {type: "NOUN"});
+		socket.emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
+		socket.broadcast.emit('open word input', {type: "NOUN", slotposition: slotposition});
 	})
 
 	socket.on("ADJ", function() {
@@ -90,12 +90,13 @@ io.sockets.on('connection', function (socket) {
 	})
 
 	socket.on('submitted word', function(data) {
-		console.log(data.word);
 		gameRoutes.addWord(socket, game, data.word);
+		socket.emit('you submitted', {word: data.word});
+		io.to(host.getId()).emit('wait for word', {type: data.type, slotposition: data.slotposition, game:game});
 	}) 
 
 })
-
+//io.clients[sessionID].send()
 
 app.get("/", gameRoutes.renderLobby);
 
