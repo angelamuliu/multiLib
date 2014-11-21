@@ -36,7 +36,8 @@ libModel.loadJSON(fs);
 
 var game;
 var host;
-var ingame = false;
+// not started | initializing | waiting for word
+var gamestage = "not started";
 
 io.sockets.on('connection', function (socket) {
 
@@ -48,14 +49,19 @@ io.sockets.on('connection', function (socket) {
 			// Reassign who is host
 			host = playerCollection.getAllPlayers[0];
 			game = null;
-			ingame = false;
+			gamestage = "not started";
 			socket.broadcast.emit('reset game');
 		}
 	});
 
+	// ++++++++++++++++++++++
+	// Setup the game and chores
+	// ++++++++++++++++++++++
+
 	// Would be called if the host wanted to stop midway
 	socket.on('remove game', function() {
 		game = null;
+		gamestage = "not started";
 		socket.broadcast.emit('reset game');
 	});
 
@@ -65,7 +71,7 @@ io.sockets.on('connection', function (socket) {
 		gameRoutes.prepGame(socket, libModel.getAllLibs());
 		game = gameRoutes.createGame(socket, host);
 		socket.broadcast.emit('wait for host');
-		ingame = true;
+		gamestage = "initializing";
 	})
 
 	// Initialize game w/ host's chosen values, update views to main game view
@@ -76,10 +82,11 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	// ++++++++++++++++++++++
-	// HOST word slot sockets
+	// HOST sockets
 	// ++++++++++++++++++++++
 
 	socket.on('NOUN', function(data) {
+		gamestage = "waiting for word";
 		var slotposition = data.slotposition;
 		socket.emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
 		socket.broadcast.emit('open word input', {type: "NOUN", slotposition: slotposition});
@@ -89,6 +96,21 @@ io.sockets.on('connection', function (socket) {
 		console.log("ADJ");
 	})
 
+	// ++++++++++++++++++++++
+	// PLAYER sockets
+	// ++++++++++++++++++++++
+
+	// For players who enter in the middle of a game ...
+	if (player !== host && host !== undefined) {
+		console.log(player);
+		console.log(host);
+		if (gamestage = "initializing") {
+			socket.emit('wait for host');
+		} else if (gamestage = "waiting for word") {
+			socket.emit('wait for host');
+		}
+	}
+
 	socket.on('submitted word', function(data) {
 		gameRoutes.addWord(socket, game, data.word);
 		socket.emit('you submitted', {word: data.word});
@@ -97,7 +119,6 @@ io.sockets.on('connection', function (socket) {
 	}) 
 
 })
-//io.clients[sessionID].send()
 
 app.get("/", gameRoutes.renderLobby);
 

@@ -11,4 +11,4 @@ Getting clients in a room
 http://stackoverflow.com/questions/6563885/socket-io-how-do-i-get-a-list-of-connected-sockets-clients
 
 Sending a message by socket id
-http://stackoverflow.com/questions/24041220/sending-message-to-a-specific-id-in-socket-io-1-0
+https://github.com/Automattic/socket.io/issues/1618
