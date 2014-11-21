@@ -104,8 +104,9 @@ socket.on('open word input', function(data) {
 })
 
 // PLAYER: Just submitted a word, now waiting for other users
-socket.on('you submitted', function() {
+socket.on('you submitted', function(data) {
 	$("div#record").empty();
+	$("div#playspace").empty();
 	$("div#record").append("You submitted the word " + data.word + ", waiting for other players now...");
 })
 

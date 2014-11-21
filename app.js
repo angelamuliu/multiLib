@@ -92,6 +92,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('submitted word', function(data) {
 		gameRoutes.addWord(socket, game, data.word);
 		socket.emit('you submitted', {word: data.word});
+		// Below: Emit event JUST to the host, whose id /socket.id is known
 		io.to(host.getId()).emit('wait for word', {type: data.type, slotposition: data.slotposition, game:game});
 	}) 
 
