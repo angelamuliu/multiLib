@@ -1,6 +1,7 @@
 
 var playerModel = require("../models/player.js");
 var Game = require("../models/game.js");
+var mongo = require('../models/mongo.js');
 
 exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby");
@@ -44,6 +45,13 @@ exports.chooseWord = function(socket, game, word, slotposition) {
 		socket.emit('render host view', {game: game});
 		socket.broadcast.emit('render player view', {game: game});
 	} else {
+		// No more empty slots, the game is OVER! Save result to mongo
+		// and render a finished screen for players somehow
 		console.log("DONE!");
+		game.processLibBody();
+		mongo.insert(game.getName(), game.getLibStr(), game.getLibId(), 
+			function() {
+				console.log("INSERTED!");
+		});
 	}
 }

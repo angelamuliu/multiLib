@@ -33,6 +33,10 @@ Game.prototype.updateName = function(name) {
 	this.name = name;
 }
 
+Game.prototype.getName = function() {
+	return this.name;
+}
+
 Game.prototype.updateLib = function(lib_id) {
 	this.lib_id = lib_id;
 }
@@ -45,6 +49,10 @@ Game.prototype.updateLibStr = function(lib_str) {
 	this.lib_str = lib_str;
 }
 
+Game.prototype.getLibStr = function() {
+	return this.lib_str;
+}
+
 Game.prototype.updateLibBody = function(lib_body) {
 	// We have to make a copy/clone the lib body provided
 	this.lib_body = lib_body.slice(0);
@@ -52,6 +60,17 @@ Game.prototype.updateLibBody = function(lib_body) {
 
 Game.prototype.getLibBody = function() {
 	return this.lib_body;
+}
+
+// Turns the lib body array into a string, and updates lib str
+Game.prototype.processLibBody = function() {
+	this.lib_str = "";
+	for (var i=0; i<this.lib_body; i++) {
+		var viewed = this.lib_body[i];
+		console.log(viewed);
+		this.lib_str = this.lib_str + viewed;
+	}
+	console.log(this.lib_str);
 }
 
 // Check if there are any unfilled word slots

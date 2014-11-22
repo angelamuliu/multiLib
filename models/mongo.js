@@ -25,19 +25,37 @@ mongoClient.connect(url, function(err, db) {
  */
 
 // INSERT
-exports.insert = function(collection, query, callback) {
-        console.log("start insert");
-        mongoDB.collection(collection).insert(
-          query,
-          {safe: true},
-          function(err, crsr) {
-            if (err) doError(err);
-            console.log("completed mongo insert");
-            callback(crsr);
-            console.log("done with insert callback");
-          });
-        console.log("leaving insert");
+exports.insert = function(game_name, lib_str, template_name, callback) {
+	// FIRST: Build query from given args
+	// THEN: Insert into libs collection EVERY TIME with this query
+	// AND THEN: That's it!!!
+	// http://localhost:50000/fruit/insert?name=pear&price=2
+	var doc = {name: game_name, libstr: lib_str, template:template_name};
+	console.log(doc);
+	mongoDB.collection("libs").insert(
+		doc,
+		{safe: true},
+		function(err, crsr) {
+			if (err) doError(err);
+			console.log("Completed insert");
+			callback(crsr);
+		});
 }
+
+// // INSERT
+// exports.insert = function(collection, query, callback) {
+//         console.log("start insert");
+//         mongoDB.collection(collection).insert(
+//           query,
+//           {safe: true},
+//           function(err, crsr) {
+//             if (err) doError(err);
+//             console.log("completed mongo insert");
+//             callback(crsr);
+//             console.log("done with insert callback");
+//           });
+//         console.log("leaving insert");
+// }
 
 // FIND
 exports.find = function(collection, query, callback) {
