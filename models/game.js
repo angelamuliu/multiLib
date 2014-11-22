@@ -46,7 +46,8 @@ Game.prototype.updateLibStr = function(lib_str) {
 }
 
 Game.prototype.updateLibBody = function(lib_body) {
-	this.lib_body = lib_body;
+	// We have to make a copy/clone the lib body provided
+	this.lib_body = lib_body.slice(0);
 }
 
 Game.prototype.getLibBody = function() {

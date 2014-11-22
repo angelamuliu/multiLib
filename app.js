@@ -77,6 +77,7 @@ io.sockets.on('connection', function (socket) {
 	// Initialize game w/ host's chosen values, update views to main game view
 	socket.on('Init Game', function(data) {
 		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
+		console.log(game.players_words);
 		socket.emit('render host view', {game: game});
 		socket.broadcast.emit('render player view', {game: game});
 	});

@@ -24,6 +24,7 @@ body {
 	margin:0;
 	background-color: #A7A37E;
 	font-family: Aleo-Light;
+	color: #002F2F;
 }
 
 h1 {
@@ -32,22 +33,41 @@ h1 {
 h1 strong {
 	font-family:ZonaPro-Bold;
 }
-
+h2 {
+	font-family: ZonaPro-Bold;
+	display:inline;
+	color: #046380;
+	font-size:20px;
+}
 div#record {
 	background-color: #EFECCA; /* Beige */
 	padding:50px;
 	padding-top:75px;
 	text-align: center;
 }
-
 footer {
 	background-color: #A7A37E;
 	height: 150px;
 	text-align:center;
 }
+div.notif {
+	color: #046380;
+	font-style: italic;
+	padding:5px;
+	background-color: #D8D4A3;
+	margin-top:15px;
+}
+header {
+	text-align:center;
+	height: 75px;
+}
+img { width: 100px; }
 
 div#home button {
 	background-color: #046380;
+	color: white;
+	font-family: ZonaPro-Bold;
+	font-size:15px;
 	border:none;
 	width:100%;
 	height:50px;
@@ -58,18 +78,25 @@ ul#home li {
   vertical-align:top;
 }
 
-button.slot {
+button.slot, button#start, button#submit_word {
 	background-color: #046380;
 	border:none;
 	color: #D8D4A3;
 	padding:10px;
 	margin:3px;
 }
-header {
-	text-align:center;
-	height: 75px;
+
+button.choosen {
+	background: none;
+	border:none;
+	font-size:15px;
+	font-family:ZonaPro-Bold;
+	color: #046380;
+	background-color: #D8D4A3;
+	padding:5px;
+	margin:5px;
 }
-img { width: 100px; }
+
 
 
 /* ======================== CSS For different devices! ======================== */
