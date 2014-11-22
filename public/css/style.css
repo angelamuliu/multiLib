@@ -1,0 +1,104 @@
+/*
+COLORS:
+Dark Sea Blue: #002F2F;
+Teal: #046380;
+Beige: #EFECCA;
+Wet Sand: #A7A37E;
+Semiwet Sand: #D8D4A3;
+*/
+
+@font-face {
+	font-family:ZonaPro-Bold;
+	src: url(fonts/ZonaPro-Bold.otf);
+}
+@font-face {
+	font-family:ZonaPro-Thin;
+	src: url(fonts/ZonaPro-Thin.otf);
+}
+@font-face {
+	font-family: Aleo-Light;
+	src: url(fonts/Aleo-Light.otf);
+}
+
+body {
+	margin:0;
+	background-color: #A7A37E;
+	font-family: Aleo-Light;
+}
+
+h1 {
+	font-family:ZonaPro-Thin;
+}
+h1 strong {
+	font-family:ZonaPro-Bold;
+}
+
+div#record {
+	background-color: #EFECCA; /* Beige */
+	padding:50px;
+	padding-top:75px;
+	text-align: center;
+}
+
+footer {
+	background-color: #A7A37E;
+	height: 150px;
+	text-align:center;
+}
+
+div#home button {
+	background-color: #046380;
+	border:none;
+	width:100%;
+	height:50px;
+}
+ul#home { padding:0;}
+ul#home li {
+  display:inline-block;
+  vertical-align:top;
+}
+
+button.slot {
+	background-color: #046380;
+	border:none;
+	color: #D8D4A3;
+	padding:10px;
+	margin:3px;
+}
+header {
+	text-align:center;
+	height: 75px;
+}
+img { width: 100px; }
+
+
+/* ======================== CSS For different devices! ======================== */
+
+/* ------------------------ MEDIUM-LARGE ------------------------ */
+/* min-width: If device width is greater than or equal to... 40em */
+@media only screen and (min-width:40em) {
+	
+	div#home {
+		margin-left: 10%;
+		margin-right: 10%;
+	}
+	div#home li { 
+		width: 45%;
+		max-width: 450px;
+		margin-right:10px;
+	}
+
+
+}
+
+/* ------------------------ SMALL ------------------------ */
+@media only screen and (max-width:40em) {
+
+	ul#home li {
+		width:100%;
+		margin-bottom:25px;
+	}
+
+
+}
+

@@ -10,7 +10,7 @@ function setHost() {
 socket.on('reset game', function(data) {
 	$("div#record").empty();
 	$("div#record").append("The game host disappeared! Sorry about that. Someone pick up the ball!<br />");
-	$("div#record").append("<button onclick=\"setHost()\">Host a game!</botton>");
+	$("div#record").append(homeNode);
 })
 
 // -------------------------------------------------
@@ -20,6 +20,7 @@ socket.on('reset game', function(data) {
 // HOST: When a host is selected, render a form for game setup
 socket.on('setup game', function(data) {
 	$("div#record").empty();
+
 	$("div#record").append("<h1>Setup</h1>");
 	$("div#record").append("Game name: <input type=\"text\" name=\"gamename\"><br/>");
 	$("div#record").append("Select a lib: <select name=\"lib\">");
@@ -40,14 +41,15 @@ socket.on('setup game', function(data) {
 socket.on('render host view', function(data) {
 	$("div#record").empty();
 	$("div#record").append("<h3>" + data.game.name + "</h3>");
+	$("div#record").append("<p></p>");
 	for (var i=0; i<data.game.lib_body.length; i++) {
 		var wordseg = data.game.lib_body[i];
 		if (wordseg[0] === "$") {
 			// Is a word slot, make button w/ id of type and position in lib array
-			$("div#record").append("<button id=\""+ i + wordseg.slice(1) + "\"></button>");
-			$("div#record button").last().append(wordseg.slice(1));
+			$("div#record p").append("<button id=\""+ i + wordseg.slice(1) + "\" class=\"slot\"></button>");
+			$("div#record p button").last().append(wordseg.slice(1));
 		} else {
-			$("div#record").append("<p>" + data.game.lib_body[i] + "</p>");
+			$("div#record p").append(data.game.lib_body[i]);
 		}
 	}
 	// Attach click handlers to the slot buttons, and sockets that relate to type of button
@@ -97,7 +99,7 @@ socket.on('render player view', function(data) {
 // PLAYER: Update UI to allow word input
 socket.on('open word input', function(data) {
 	$("div#record").empty();
-	$("div#record").append("The host is asking for a " + data.type + "!");
+	$("div#record").append("The host is asking for a " + data.type + "! ");
 	$("div#record").append("Toss a word in! <input type=\"text\" name=\"playerinput\"><br/>");
 	$("div#record").append("<button id=\"submit_word\">Go!</button>");
 	$("button#submit_word").click( function() {

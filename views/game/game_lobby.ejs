@@ -3,18 +3,35 @@
 <html>
   <head>
     <title>multiLIB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    
+    <link rel="stylesheet" href="css/style.css" >
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' type='text/javascript'></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/clientSocket.js"></script>
     <script src="js/myJS.js"></script>
+    <script src="js/clientSocket.js"></script>
   </head>
   <body>
-  	
-  	<% include header.ejs %>
+
+    <header>
+      <img src="images/multiLIB_logo_N.png"/>
+    </header>
 
   	<div id="record">
-      <button onclick="setHost()" >Host a game!</button>
+      <div id="home">
+        <h1>multi<strong>LIB</strong></h1>
+        <ul id="home">
+          <li>
+            Fill in wacky stories together with your friends online! As a host, you can choose which story template to use and choose from player input, which word goes in the final story. As players, pitch in words as the host asks!
+          </li>
+          <li><button onclick="setHost()" >Host a game!</button></li>
+        </ul>
+      </div>
   	</div>
-    
+
+    <footer>
+      <% include footer.ejs %>
+    </footer>
+
   </body>
 </html>
