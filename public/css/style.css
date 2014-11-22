@@ -44,10 +44,11 @@ div#record {
 	padding:50px;
 	padding-top:75px;
 	text-align: center;
+	min-height:300px;
 }
 footer {
 	background-color: #A7A37E;
-	height: 150px;
+	height: 75px;
 	text-align:center;
 }
 div.notif {
@@ -71,11 +72,6 @@ div#home button {
 	border:none;
 	width:100%;
 	height:50px;
-}
-ul#home { padding:0;}
-ul#home li {
-  display:inline-block;
-  vertical-align:top;
 }
 
 button.slot, button#start, button#submit_word {
@@ -106,13 +102,20 @@ button.choosen {
 @media only screen and (min-width:40em) {
 	
 	div#home {
+		float:left;
 		margin-left: 10%;
-		margin-right: 10%;
+		text-align:left;
+		width: 40%;
 	}
-	div#home li { 
+	div#home button { 
 		width: 45%;
 		max-width: 450px;
 		margin-right:10px;
+	}
+	img#robos {
+		width: 40%;
+		max-width:300px;
+		margin-right:10%;
 	}
 
 
@@ -121,10 +124,15 @@ button.choosen {
 /* ------------------------ SMALL ------------------------ */
 @media only screen and (max-width:40em) {
 
-	ul#home li {
-		width:100%;
-		margin-bottom:25px;
+
+	div#home p, div#home button {
+		width: 100%;
+		margin-bottom: 25px;
 	}
+	img#robos {
+		display:none;
+	}
+
 
 
 }
