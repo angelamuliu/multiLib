@@ -80,7 +80,7 @@ socket.on('render host view', function(data) {
 	$("div#record button").click( function() {
 		var slotposition = $(this).attr('id')[0];
 		var type = $(this).attr('id').slice(1);
-		socket.emit(type, {slotposition: slotposition});
+		socket.emit('slot handler', {type: type, slotposition: slotposition});
 	})
 })
 
@@ -97,7 +97,6 @@ socket.on('wait for word', function(data) {
 	} else {
 		for (var i=0; i<data.game.players_words.length; i++) {
 			$("div#inputwords").append("<button class=\"choosen\">"+data.game.players_words[i]+"</button>");
-			// $("div#inputwords").append("<p>"+data.game.players_words[i]+"</p>");
 		}
 	}
 	// Attach click handlers to player word input buttons
@@ -156,7 +155,6 @@ socket.on('libs done', function(data) {
 		var viewedLib = data.libs[i];
 		if (viewedLib.template === "0") { $("div#0").append("<div class=\"completed\"><strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p></div>")};
 	}
-	$("div#record").append("<button onclick=\"returnHome()\">Back</button>");
 })
 
 

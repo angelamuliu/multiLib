@@ -35,8 +35,10 @@ var dbRoutes = require('./routes/dbRoutes.js');
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
 
+// Variables kept track per app
 var game;
 var host = null;
+
 // not started | initializing | waiting for word
 var gamestage = "not started";
 
@@ -94,6 +96,22 @@ io.sockets.on('connection', function (socket) {
 	// ++++++++++++++++++++++
 	// HOST sockets
 	// ++++++++++++++++++++++
+
+	socket.on('slot handler', function(data) {
+		gamestage = "waiting for word";
+		var slotposition = data.slotposition;
+		switch (data.type) {
+			case 'NOUN': 	io.to('host').emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
+							io.to('playing').emit('open word input', {type: "NOUN", slotposition: slotposition});
+							break;
+			case 'P_NOUN': 	io.to('host').emit('wait for word', {type: "PROPER NOUN", slotposition: slotposition, game: game});
+							io.to('playing').emit('open word input', {type: "PROPER NOUN", slotposition: slotposition});
+							break;
+			case 'ADJ': 	io.to('host').emit('wait for word', {type: "ADJECTIVE", slotposition: slotposition, game: game});
+							io.to('playing').emit('open word input', {type: "ADJECTIVE", slotposition: slotposition});
+							break;
+		}
+	})
 
 	socket.on('NOUN', function(data) {
 		gamestage = "waiting for word";

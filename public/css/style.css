@@ -74,7 +74,7 @@ header {
 }
 img { width: 100px; }
 
-div#home button {
+div#home button, button#return {
 	background-color: #046380;
 	color: white;
 	font-family: ZonaPro-Bold;

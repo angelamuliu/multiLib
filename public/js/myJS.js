@@ -9,4 +9,5 @@ var homeNode = "<div id=\"home\">" +
     "<img id=\"robos\" src=\"images/robos.png\"/></div>";
 
 var libNode = "<div class=\"lib_container\" id=\"0\"></div>" +
-	"<div class=\"lib_container\" id=\"1\"></div>";
+	"<div class=\"lib_container\" id=\"1\"></div>" +
+	"<button id=\"return\" onclick=\"returnHome()\">Back</button>";
