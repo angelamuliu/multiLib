@@ -70,6 +70,10 @@ exports.chooseWord = function(io, socket, game, word, slotposition) {
 			function() {
 				io.to('host').emit('finished game', {completeLib: game.getLibStr()});
 				io.to('playing').emit('finished game', {completeLib: game.getLibStr()});
+				mongo.find( function(libs) {
+					// Add the new lib to the libs page for all those in it atm! Rerender
+					io.to('viewLib_room').emit('libs done', {libs:libs});
+				})
 		});
 	}
 }

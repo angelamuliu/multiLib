@@ -167,7 +167,7 @@ socket.on('libs done', function(data) {
 			var viewedLib = data.libs[i];
 			$("div.lib_container").append("<div class=\"completed\"><strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p></div>");
 			// Attach a button whos id corresponds with the lib
-			$("div.completed").last().append("<button id=\"" + viewedLib._id + "\">Delete</button>");
+			$("div.completed").last().append("<button class=\"delete\" id=\"" + viewedLib._id + "\">Delete</button>");
 		}
 		$("div#record").append(libNode);
 

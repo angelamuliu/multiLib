@@ -87,7 +87,7 @@ div#home button, button#return {
 	margin-top:2px;
 }
 
-button.slot, button#start, button#submit_word {
+button.slot, button#start, button#submit_word, button.delete {
 	background-color: #046380;
 	border:none;
 	color: #D8D4A3;
