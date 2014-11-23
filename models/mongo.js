@@ -24,7 +24,7 @@ mongoClient.connect(url, function(err, db) {
  * data directly?
  */
 
-// INSERT
+// INSERT a lib into the db
 exports.insert = function(game_name, lib_str, template_name, callback) {
 	// FIRST: Build query from given args
 	// THEN: Insert into libs collection EVERY TIME with this query
@@ -37,34 +37,20 @@ exports.insert = function(game_name, lib_str, template_name, callback) {
 		{safe: true},
 		function(err, crsr) {
 			if (err) doError(err);
-			console.log("Completed insert");
 			callback(crsr);
 		});
 }
 
-// // INSERT
-// exports.insert = function(collection, query, callback) {
-//         console.log("start insert");
-//         mongoDB.collection(collection).insert(
-//           query,
-//           {safe: true},
-//           function(err, crsr) {
-//             if (err) doError(err);
-//             console.log("completed mongo insert");
-//             callback(crsr);
-//             console.log("done with insert callback");
-//           });
-//         console.log("leaving insert");
-// }
-
-// FIND
-exports.find = function(collection, query, callback) {
-        var crsr = mongoDB.collection(collection).find(query);
-        crsr.toArray(function(err, docs) {
-          if (err) doError(err);
-          callback(docs);
-        });
- }
+// Actually just finds ALL libs in the db
+exports.find = function(callback) {
+	var crsr = mongoDB.collection("libs").find();
+	crsr.toArray(function(err, libs) {
+		if (err) {
+			console.log(err);
+		}
+		callback(libs);
+	})
+}
 
 // UPDATE
 exports.update = function(collection, query, callback) {

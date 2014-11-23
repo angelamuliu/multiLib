@@ -30,7 +30,7 @@ httpServer.listen(50000, function() {console.log('Listening on 50000');});
 var libModel = require('./models/lib.js');
 var gameRoutes = require('./routes/gameRoutes.js');
 var playerCollection = require('./models/playercollection.js');
-var dbRoutes = require('./routes/dbRoutes');
+var dbRoutes = require('./routes/dbRoutes.js');
 
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
@@ -114,10 +114,8 @@ io.sockets.on('connection', function (socket) {
 	if (player !== host && host !== null) {
 		console.log(host);
 		if (gamestage = "initializing") {
-			console.log("initializing");
 			socket.emit('wait for host');
 		} else if (gamestage = "waiting for word") {
-			console.log("waiting for word");
 			socket.emit('wait for host');
 		}
 	}
@@ -132,6 +130,8 @@ io.sockets.on('connection', function (socket) {
 })
 
 app.get("/", gameRoutes.renderLobby);
+app.get("/libs", gameRoutes.renderMongo);
+// app.get("/libs", dbRoutes.mongo);
 
 app.get("/:collection/:operation", dbRoutes.mongo);
 

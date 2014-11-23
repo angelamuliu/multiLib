@@ -1,15 +1,36 @@
+
 <!DOCTYPE html>
 <html>
-	<head>
-		<title><%= title %></title>
-	</head>
-	<body>
-		<% if (obj.length) { %>
+  <head>
+    <title>multiLIB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    
+    <link rel="stylesheet" href="css/style.css" >
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js' type='text/javascript'></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/myJS.js"></script>
+    <script src="js/clientSocket.js"></script>
+  </head>
+  <body>
+
+    <header>
+      <img src="images/multiLIB_logo_N.png"/>
+    </header>
+
+    test
+  	<div id="record">
+      <% if (libs.length) { %>
 			[</br>
-				<% obj.forEach(function(next) { %>
+				<% libs.forEach(function(next) { %>
 				<%= JSON.stringify(next) %></br>
 			<% }); %>
 			]
-		<% } %>
-	</body>
+	<% } %>
+  	</div>
+
+    <footer>
+      <% include footer.ejs %>
+    </footer>
+
+  </body>
 </html>

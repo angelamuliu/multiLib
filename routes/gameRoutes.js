@@ -7,6 +7,12 @@ exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby");
 }
 
+exports.renderMongo = function(req, res) {
+	mongo.find( function(libs) {
+		res.render('game/mongo', {libs: libs});
+	});
+}
+
 // Host is given this event to set up initial game values
 exports.prepGame = function(socket, libs) {
 	socket.emit('setup game', {libs: libs});
