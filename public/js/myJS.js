@@ -8,6 +8,4 @@ var homeNode = "<div id=\"home\">" +
 	"<button onclick=\"viewLibs()\" >View old libs</button></div>" +
     "<img id=\"robos\" class=\"slideUp\" src=\"images/robos.png\"/></div>";
 
-var libNode = "<div class=\"lib_container\" id=\"0\"></div>" +
-	"<div class=\"lib_container\" id=\"1\"></div>" +
-	"<button id=\"return\" onclick=\"returnHome()\">Back</button>";
+var libNode = "<button id=\"return\" onclick=\"returnHome()\">Back</button>";

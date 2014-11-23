@@ -114,7 +114,7 @@ socket.on('wait for word', function(data) {
 // PLAYER: A general waiting page for nonhost players, waiting for the host to make choices
 socket.on('wait for host', function() {
 	$("div#record").empty();
-	$("div#record").append("<p>Waiting for game host...</p>");
+	$("div#record").append("<p>Waiting for host to setup game...</p>");
 	$("div#record p").append("<br /><i class=\"fa fa-spin fa-cog fa-3x\"></i>");
 
 })
@@ -123,7 +123,7 @@ socket.on('wait for host', function() {
 socket.on('render player view', function(data) {
 	$("div#record").empty();
 	$("div#record").append("<img class=\"slideUp roboimg\" src=\"images/robo_hostChooseLib.png\"/>");
-	$("div#record").append("<p>Host has choosen a lib! Just wait a little longer.</p>");
+	$("div#record").append("<p>Waiting for host to select a word slot...Just wait a little longer.</p>");
 	$("div#record p").append("<br /><i class=\"fa fa-spin fa-cog fa-3x\"></i>");
 })
 
@@ -157,10 +157,25 @@ socket.on('you submitted', function(data) {
 // Libs done loading from mongo, let's render them in a neat fashion
 socket.on('libs done', function(data) {
 	$("div#record").empty();
-	$("div#record").append(libNode);
-	for (var i=0; i<data.libs.length; i++) {
-		var viewedLib = data.libs[i];
-		if (viewedLib.template === "0") { $("div#0").append("<div class=\"completed\"><strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p></div>")};
+	$("div#record").append("<div class=\"lib_container\"></div>");
+
+	if (data.libs.length === 0) {
+		$("div#record").append("<p>There are no libs saved.</p>");
+		$("div#record").append(libNode);
+	} else {
+		for (var i=0; i<data.libs.length; i++) {
+			var viewedLib = data.libs[i];
+			$("div.lib_container").append("<div class=\"completed\"><strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p></div>");
+			// Attach a button whos id corresponds with the lib
+			$("div.completed").last().append("<button id=\"" + viewedLib._id + "\">Delete</button>");
+		}
+		$("div#record").append(libNode);
+
+		// Attach a click handler for the buttons to delete each lib
+		$("div.lib_container button").click( function() {
+			var id = $(this).attr("id");
+			socket.emit('remove lib', {lib_id: id});
+		})
 	}
 })
 

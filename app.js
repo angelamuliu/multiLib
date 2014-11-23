@@ -181,6 +181,10 @@ io.sockets.on('connection', function (socket) {
 		}
 	})
 
+	socket.on('remove lib', function(data) {
+		gameRoutes.deleteLib(io, data.lib_id);
+	})
+
 
 
 })

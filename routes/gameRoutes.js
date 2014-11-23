@@ -13,6 +13,16 @@ exports.renderMongo = function(socket) {
 	});
 }
 
+exports.deleteLib = function(io, lib_id) {
+	mongo.delete(lib_id, function(message) {
+		console.log(message);
+		mongo.find( function(libs) {
+			// Rerender the libs page for all those in it atm
+			io.to('viewLib_room').emit('libs done', {libs:libs});
+		})
+	})
+}
+
 // Host is given this event to set up initial game values
 exports.prepGame = function(socket, libs) {
 	socket.emit('setup game', {libs: libs});

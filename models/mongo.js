@@ -1,5 +1,6 @@
 var util = require("util");
 var mongoClient = require('mongodb').MongoClient;
+var BSON = require('mongodb').BSONPure; // Used to locate docs by doc id
 
 /*
  * This is the connection URL
@@ -27,11 +28,8 @@ mongoClient.connect(url, function(err, db) {
 // INSERT a lib into the db
 exports.insert = function(game_name, lib_str, template_name, callback) {
 	// FIRST: Build query from given args
-	// THEN: Insert into libs collection EVERY TIME with this query
-	// AND THEN: That's it!!!
-	// http://localhost:50000/fruit/insert?name=pear&price=2
+	// THEN: Insert into libs collection with this query
 	var doc = {name: game_name, libstr: lib_str, template:template_name};
-	console.log(doc);
 	mongoDB.collection("libs").insert(
 		doc,
 		{safe: true},
@@ -49,6 +47,20 @@ exports.find = function(callback) {
 		callback(libs);
 	})
 }
+
+// Given the doc id, delete a doc in collection libs
+exports.delete = function(lib_id, callback) {
+	// To get docs by doc id, we have to convert it into an ObjectID obj
+	var obj_id = BSON.ObjectID.createFromHexString(lib_id);
+	var toDelete_doc = {_id: obj_id};
+	mongoDB.collection("libs").remove(toDelete_doc,
+		function(err, crsr) {
+			if (err) doError(err);
+			callback('Delete successful');
+		});
+}
+
+
 
 var doError = function(e) {
         util.debug("ERROR: " + e);
