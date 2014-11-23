@@ -127,6 +127,13 @@ button.choosen {
 		max-width:300px;
 		margin-right:10%;
 	}
+	div.lib_container {
+		margin-left:25%;
+		margin-right:25%;
+	}
+	button#return {
+		max-width:400px;
+	}
 
 
 }
