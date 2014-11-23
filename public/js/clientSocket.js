@@ -45,7 +45,7 @@ socket.on('finished game', function(data) {
 socket.on('setup game', function(data) {
 	$("div#record").empty();
 
-	$("div#record").append("<h1>Setup</h1>");
+	$("div#record").append("<h1>Setup the game</h1>");
 	$("div#record").append("Game name: <input type=\"text\" name=\"gamename\"><br/>");
 	$("div#record").append("Select a lib: <select name=\"lib\">");
 	for (var i=0; i<data.libs.length; i++) {
@@ -87,6 +87,7 @@ socket.on('render host view', function(data) {
 // HOST: Start a timer and wait for words from other players
 socket.on('wait for word', function(data) {
 	$("div#record").empty();
+	$("div#record").append("<img class=\"roboimg\" src=\"images/robo_hostChooseLib.png\"/>");
 	$("div#record").append("<p>Waiting for </p>");
 	$("div#record p").append("<h2>"+data.type+"</h2>");
 	$("div#record p").append(" words from players...");
@@ -96,7 +97,7 @@ socket.on('wait for word', function(data) {
 		$("div#inputwords").append("No words have come in yet.");
 	} else {
 		for (var i=0; i<data.game.players_words.length; i++) {
-			$("div#inputwords").append("<button class=\"choosen\">"+data.game.players_words[i]+"</button>");
+			$("div#inputwords").append("<button class=\"choosen slideUp\">"+data.game.players_words[i]+"</button>");
 		}
 	}
 	// Attach click handlers to player word input buttons
@@ -113,20 +114,25 @@ socket.on('wait for word', function(data) {
 // PLAYER: A general waiting page for nonhost players, waiting for the host to make choices
 socket.on('wait for host', function() {
 	$("div#record").empty();
-	$("div#record").append("<p>Waiting for host</p>");
+	$("div#record").append("<p>Waiting for game host...</p>");
+	$("div#record p").append("<br /><i class=\"fa fa-spin fa-cog fa-3x\"></i>");
+
 })
 
 // PLAYER: Create the main mad lib game interface, player view
 socket.on('render player view', function(data) {
 	$("div#record").empty();
-	$("div#record").append("<p>Host has choosen a lib. Keep on waiting.</p>");
+	$("div#record").append("<img class=\"slideUp roboimg\" src=\"images/robo_hostChooseLib.png\"/>");
+	$("div#record").append("<p>Host has choosen a lib! Just wait a little longer.</p>");
+	$("div#record p").append("<br /><i class=\"fa fa-spin fa-cog fa-3x\"></i>");
 })
 
 // PLAYER: Update UI to allow word input
 socket.on('open word input', function(data) {
 	$("div#record").empty();
-	$("div#record").append("The host is asking for a " + data.type + "! ");
-	$("div#record").append("Toss a word in! <input type=\"text\" name=\"playerinput\">");
+	$("div#record").append("<img class=\"slideUp roboimg\" src=\"images/robos_giveWords.png\"/>");
+	$("div#record").append("<p>The host is asking for a " + data.type + "! Toss a word in!</p>");
+	$("div#record").append("<input type=\"text\" name=\"playerinput\">");
 	$("div#record").append("<button id=\"submit_word\">Go!</button>");
 	$("button#submit_word").click( function() {
 		var input = $("input[name=playerinput]").val();
@@ -139,7 +145,8 @@ socket.on('open word input', function(data) {
 // PLAYER: Just submitted a word, now waiting for other users
 socket.on('you submitted', function(data) {
 	$("div#record").empty();
-	$("div#record").append("You submitted the word " + data.word + ", waiting for other players now...");
+		$("div#record").append("<img class=\"roboimg\" src=\"images/robos_giveWords.png\"/>");
+	$("div#record").append("<p>You submitted the word " + data.word + ", waiting for other players now...</p>");
 })
 
 

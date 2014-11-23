@@ -30,7 +30,6 @@ httpServer.listen(50000, function() {console.log('Listening on 50000');});
 var libModel = require('./models/lib.js');
 var gameRoutes = require('./routes/gameRoutes.js');
 var playerCollection = require('./models/playercollection.js');
-var dbRoutes = require('./routes/dbRoutes.js');
 
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
