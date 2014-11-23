@@ -47,12 +47,11 @@ exports.chooseWord = function(socket, game, word, slotposition) {
 	} else {
 		// No more empty slots, the game is OVER! Save result to mongo
 		// and render a finished screen for players somehow
-		console.log("DONE!");
-		console.log(game.getLibBody());
 		game.processLibBody();
 		mongo.insert(game.getName(), game.getLibStr(), game.getLibId(), 
 			function() {
-				console.log("INSERTED!");
+				socket.emit('finished game', {completeLib: game.getLibStr()});
+				socket.broadcast.emit('finished game', {completeLib: game.getLibStr()});
 		});
 	}
 }

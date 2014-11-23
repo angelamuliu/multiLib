@@ -58,6 +58,13 @@ div.notif {
 	background-color: #D8D4A3;
 	margin-top:15px;
 }
+div.completed {
+	color: #046380;
+	background-color: #D8D4A3;
+	padding:10px;
+	margin-top:15px;
+	margin-bottom:15px;
+}
 header {
 	text-align:center;
 	height: 75px;

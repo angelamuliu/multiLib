@@ -36,7 +36,7 @@ var dbRoutes = require('./routes/dbRoutes');
 libModel.loadJSON(fs);
 
 var game;
-var host;
+var host = null;
 // not started | initializing | waiting for word
 var gamestage = "not started";
 
@@ -47,8 +47,7 @@ io.sockets.on('connection', function (socket) {
 	socket.on('disconnect', function () {
 		playerCollection.deletePlayer(player);
 		if (host === player) {
-			// Reassign who is host
-			host = playerCollection.getAllPlayers[0];
+			host = null;
 			game = null;
 			gamestage = "not started";
 			socket.broadcast.emit('reset game');
@@ -60,10 +59,11 @@ io.sockets.on('connection', function (socket) {
 	// ++++++++++++++++++++++
 
 	// Would be called if the host wanted to stop midway
-	socket.on('remove game', function() {
+	socket.on('reset', function() {
+		console.log("RESET THE GAME");
+		host = null;
 		game = null;
 		gamestage = "not started";
-		socket.broadcast.emit('reset game');
 	});
 
 	// A player has clicked a button to be host, update host and other player views
@@ -103,7 +103,7 @@ io.sockets.on('connection', function (socket) {
 
 	// Host clicked on a player submitted word, time to move on!
 	socket.on("choosen", function(data) {
-		gameRoutes.chooseWord(socket, game, data.choosenword, data.slotposition);
+		gameRoutes.chooseWord(socket, game, data.choosenword, data.slotposition, host, gamestage);
 	})
 
 	// ++++++++++++++++++++++
@@ -111,12 +111,13 @@ io.sockets.on('connection', function (socket) {
 	// ++++++++++++++++++++++
 
 	// For players who enter in the middle of a game ...
-	if (player !== host && host !== undefined) {
-		console.log(player);
+	if (player !== host && host !== null) {
 		console.log(host);
 		if (gamestage = "initializing") {
+			console.log("initializing");
 			socket.emit('wait for host');
 		} else if (gamestage = "waiting for word") {
+			console.log("waiting for word");
 			socket.emit('wait for host');
 		}
 	}

@@ -13,6 +13,16 @@ socket.on('reset game', function(data) {
 	$("div#record").append(homeNode);
 })
 
+// A game has been completed
+socket.on('finished game', function(data) {
+	$("div#record").empty();
+	$("div#record").append("<div class=\"completed\"></div>");
+	$("div.completed").append("<h2>Check out the finished lib!</h2>");
+	$("div.completed").append("<p>"+data.completeLib+"</p>");
+	$("div#record").append(homeNode);
+	socket.emit('reset');
+})
+
 // -------------------------------------------------
 // HOST SOCKETS
 // -------------------------------------------------
