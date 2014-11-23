@@ -7,9 +7,9 @@ exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby");
 }
 
-exports.renderMongo = function(req, res) {
+exports.renderMongo = function(socket) {
 	mongo.find( function(libs) {
-		res.render('game/mongo', {libs: libs});
+		socket.emit('libs done', {libs: libs});
 	});
 }
 
@@ -47,6 +47,7 @@ exports.chooseWord = function(socket, game, word, slotposition) {
 	game.updateLibBody(updated_libBody);
 	// Clear game player submitted words array for next round!
 	game.clearPlayerWords();
+
 	if (game.emptySlots_inLibBody()) {
 		socket.emit('render host view', {game: game});
 		socket.broadcast.emit('render player view', {game: game});

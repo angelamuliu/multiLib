@@ -127,10 +127,18 @@ io.sockets.on('connection', function (socket) {
 		io.to(host.getId()).emit('wait for word', {type: data.type, slotposition: data.slotposition, game:game});
 	}) 
 
+	// ++++++++++++++++++++++
+	// MONGO sockets
+	// ++++++++++++++++++++++
+
+	// Change view to the lib viewer, loads libs in the mongoDB
+	socket.on('load libs', function() {
+		gameRoutes.renderMongo(socket);
+	})
+
 })
 
 app.get("/", gameRoutes.renderLobby);
-app.get("/libs", gameRoutes.renderMongo);
 // app.get("/libs", dbRoutes.mongo);
 
 app.get("/:collection/:operation", dbRoutes.mongo);

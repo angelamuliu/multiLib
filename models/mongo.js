@@ -45,24 +45,10 @@ exports.insert = function(game_name, lib_str, template_name, callback) {
 exports.find = function(callback) {
 	var crsr = mongoDB.collection("libs").find();
 	crsr.toArray(function(err, libs) {
-		if (err) {
-			console.log(err);
-		}
+		if (err) doError(err);
 		callback(libs);
 	})
 }
-
-// UPDATE
-exports.update = function(collection, query, callback) {
-          mongoDB.collection(collection).update(
-            JSON.parse(query.find),
-            JSON.parse(query.update), {
-              new: true
-            }, function(err, crsr) {
-              if (err) doError(err);
-              callback('Update succeeded');
-        });
-  }
 
 var doError = function(e) {
         util.debug("ERROR: " + e);

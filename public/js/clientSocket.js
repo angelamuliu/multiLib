@@ -5,6 +5,10 @@ function setHost() {
 	socket.emit('set host');
 }
 
+function viewLibs() {
+	socket.emit('load libs');
+}
+
 // Update UI for connected players IF a game is reset due to disconnected 
 // or left host
 socket.on('reset game', function(data) {
@@ -134,7 +138,16 @@ socket.on('you submitted', function(data) {
 // MONGO DB SOCKETS
 // -------------------------------------------------
 
-
+// Libs done loading from mongo, let's render them in a neat fashion
+socket.on('libs done', function(data) {
+	$("div#record").empty();
+	$("div#record").append(libNode);
+	for (var i=0; i<data.libs.length; i++) {
+		var viewedLib = data.libs[i];
+		if (viewedLib.template === "0") { $("div#0").append("<strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p>")};
+		if (viewedLib.template === "1") { $("div#0").append("<strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p>")};
+	}
+})
 
 
 
