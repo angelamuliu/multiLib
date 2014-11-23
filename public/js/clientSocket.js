@@ -144,8 +144,7 @@ socket.on('libs done', function(data) {
 	$("div#record").append(libNode);
 	for (var i=0; i<data.libs.length; i++) {
 		var viewedLib = data.libs[i];
-		if (viewedLib.template === "0") { $("div#0").append("<strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p>")};
-		if (viewedLib.template === "1") { $("div#0").append("<strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p>")};
+		if (viewedLib.template === "0") { $("div#0").append("<div class=\"completed\"><strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p></div>")};
 	}
 })
 

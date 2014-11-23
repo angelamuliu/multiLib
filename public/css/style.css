@@ -26,7 +26,10 @@ body {
 	font-family: Aleo-Light;
 	color: #002F2F;
 }
-
+strong {
+	font-family:ZonaPro-Bold;
+	color: #046380;
+}
 h1 {
 	font-family:ZonaPro-Thin;
 }
