@@ -43,6 +43,7 @@ var gamestage = "not started";
 io.sockets.on('connection', function (socket) {
 
 	var player = playerCollection.createPlayer(socket.id);
+	var curraction = "available";
 
 	socket.on('disconnect', function () {
 		playerCollection.deletePlayer(player);
@@ -60,7 +61,6 @@ io.sockets.on('connection', function (socket) {
 
 	// Would be called if the host wanted to stop midway
 	socket.on('reset', function() {
-		console.log("RESET THE GAME");
 		host = null;
 		game = null;
 		gamestage = "not started";
@@ -73,6 +73,8 @@ io.sockets.on('connection', function (socket) {
 		game = gameRoutes.createGame(socket, host);
 		socket.broadcast.emit('wait for host');
 		gamestage = "initializing";
+
+		io.to('viewLib_room').emit('testing lib room');
 	})
 
 	// Initialize game w/ host's chosen values, update views to main game view
@@ -133,7 +135,28 @@ io.sockets.on('connection', function (socket) {
 
 	// Change view to the lib viewer, loads libs in the mongoDB
 	socket.on('load libs', function() {
+		socket.join('viewLib_room');
 		gameRoutes.renderMongo(socket);
+	})
+
+	// Player has left the lib view, reenter as a possible player
+	socket.on('leave libs', function() {
+		console.log("Leave libs");
+		socket.leave('viewLib_room');
+		// Game in progress, render a waiting view
+		if (player !== host && host !== null) {
+			console.log("in progress");
+			if (gamestage = "initializing") {
+				socket.emit('wait for host');
+			} else if (gamestage = "waiting for word") {
+				socket.emit('wait for host');
+			}
+		} else {
+			console.log("No game");
+			socket.emit('reload lobby');
+			// No game in progress, rerender the home page
+
+		}
 	})
 
 })

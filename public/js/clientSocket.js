@@ -9,6 +9,16 @@ function viewLibs() {
 	socket.emit('load libs');
 }
 
+function returnHome() {
+	socket.emit('leave libs');
+}
+
+// Just reloat the lobby
+socket.on('reload lobby', function(data) {
+	$("div#record").empty();
+	$("div#record").append(homeNode);
+})
+
 // Update UI for connected players IF a game is reset due to disconnected 
 // or left host
 socket.on('reset game', function(data) {
@@ -146,9 +156,8 @@ socket.on('libs done', function(data) {
 		var viewedLib = data.libs[i];
 		if (viewedLib.template === "0") { $("div#0").append("<div class=\"completed\"><strong>"+viewedLib.name+"</strong><p>"+viewedLib.libstr+"</p></div>")};
 	}
+	$("div#record").append("<button onclick=\"returnHome()\">Back</button>");
 })
-
-
 
 
 
