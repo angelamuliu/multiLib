@@ -43,8 +43,9 @@ var gamestage = "not started";
 io.sockets.on('connection', function (socket) {
 
 	var player = playerCollection.createPlayer(socket.id);
-	var curraction = "available";
+	socket.join('playing'); // Socket room for those who are playing
 
+	// Disconnect automatically kicks the socket out of any rooms
 	socket.on('disconnect', function () {
 		playerCollection.deletePlayer(player);
 		if (host === player) {
@@ -61,6 +62,8 @@ io.sockets.on('connection', function (socket) {
 
 	// Would be called if the host wanted to stop midway
 	socket.on('reset', function() {
+		socket.leave('host');
+		socket.join('playing');
 		host = null;
 		game = null;
 		gamestage = "not started";
@@ -68,10 +71,15 @@ io.sockets.on('connection', function (socket) {
 
 	// A player has clicked a button to be host, update host and other player views
 	socket.on('set host', function() {
+		socket.join('host'); // Assign this socket to host
+		socket.leave('playing');
 		host = player;
 		gameRoutes.prepGame(socket, libModel.getAllLibs());
 		game = gameRoutes.createGame(socket, host);
-		socket.broadcast.emit('wait for host');
+
+		io.to('playing').emit('wait for host');
+
+		//socket.broadcast.emit('wait for host');
 		gamestage = "initializing";
 
 		io.to('viewLib_room').emit('testing lib room');
@@ -136,13 +144,14 @@ io.sockets.on('connection', function (socket) {
 	// Change view to the lib viewer, loads libs in the mongoDB
 	socket.on('load libs', function() {
 		socket.join('viewLib_room');
+		socket.leave('playing');
 		gameRoutes.renderMongo(socket);
 	})
 
 	// Player has left the lib view, reenter as a possible player
 	socket.on('leave libs', function() {
-		console.log("Leave libs");
 		socket.leave('viewLib_room');
+		socket.join('playing');
 		// Game in progress, render a waiting view
 		if (player !== host && host !== null) {
 			console.log("in progress");
