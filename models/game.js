@@ -65,12 +65,10 @@ Game.prototype.getLibBody = function() {
 // Turns the lib body array into a string, and updates lib str
 Game.prototype.processLibBody = function() {
 	this.lib_str = "";
-	for (var i=0; i<this.lib_body; i++) {
+	for (var i=0; i<this.lib_body.length; i++) {
 		var viewed = this.lib_body[i];
-		console.log(viewed);
 		this.lib_str = this.lib_str + viewed;
 	}
-	console.log(this.lib_str);
 }
 
 // Check if there are any unfilled word slots
