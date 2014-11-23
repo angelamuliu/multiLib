@@ -40,25 +40,26 @@ exports.addWord = function(socket, game, word) {
 }
 
 // Host has chosen a word, now let's update the game and views!
-exports.chooseWord = function(socket, game, word, slotposition) {
+exports.chooseWord = function(io, socket, game, word, slotposition) {
 	// Update the lib body array
 	var updated_libBody = game.getLibBody();
 	updated_libBody[slotposition] = word;
 	game.updateLibBody(updated_libBody);
+	
 	// Clear game player submitted words array for next round!
 	game.clearPlayerWords();
 
 	if (game.emptySlots_inLibBody()) {
-		socket.emit('render host view', {game: game});
-		socket.broadcast.emit('render player view', {game: game});
+		io.to('host').emit('render host view', {game: game});
+		io.to('playing').emit('render player view', {game: game});
 	} else {
 		// No more empty slots, the game is OVER! Save result to mongo
 		// and render a finished screen for players somehow
 		game.processLibBody();
 		mongo.insert(game.getName(), game.getLibStr(), game.getLibId(), 
 			function() {
-				socket.emit('finished game', {completeLib: game.getLibStr()});
-				socket.broadcast.emit('finished game', {completeLib: game.getLibStr()});
+				io.to('host').emit('finished game', {completeLib: game.getLibStr()});
+				io.to('playing').emit('finished game', {completeLib: game.getLibStr()});
 		});
 	}
 }

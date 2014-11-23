@@ -43,7 +43,9 @@ var gamestage = "not started";
 io.sockets.on('connection', function (socket) {
 
 	var player = playerCollection.createPlayer(socket.id);
-	socket.join('playing'); // Socket room for those who are playing
+
+	// Socket rooms: playing, host, viewLib_room
+	socket.join('playing');
 
 	// Disconnect automatically kicks the socket out of any rooms
 	socket.on('disconnect', function () {
@@ -52,7 +54,7 @@ io.sockets.on('connection', function (socket) {
 			host = null;
 			game = null;
 			gamestage = "not started";
-			socket.broadcast.emit('reset game');
+			io.to('playing').emit('reset game');
 		}
 	});
 
@@ -78,19 +80,15 @@ io.sockets.on('connection', function (socket) {
 		game = gameRoutes.createGame(socket, host);
 
 		io.to('playing').emit('wait for host');
-
-		//socket.broadcast.emit('wait for host');
 		gamestage = "initializing";
-
-		io.to('viewLib_room').emit('testing lib room');
 	})
 
 	// Initialize game w/ host's chosen values, update views to main game view
 	socket.on('Init Game', function(data) {
 		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
 		console.log(game.players_words);
-		socket.emit('render host view', {game: game});
-		socket.broadcast.emit('render player view', {game: game});
+		io.to('host').emit('render host view', {game: game});
+		io.to('playing').emit('render player view', {game: game});
 	});
 
 	// ++++++++++++++++++++++
@@ -100,20 +98,20 @@ io.sockets.on('connection', function (socket) {
 	socket.on('NOUN', function(data) {
 		gamestage = "waiting for word";
 		var slotposition = data.slotposition;
-		socket.emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
-		socket.broadcast.emit('open word input', {type: "NOUN", slotposition: slotposition});
+		io.to('host').emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
+		io.to('playing').emit('open word input', {type: "NOUN", slotposition: slotposition});
 	})
 
 	socket.on("ADJ", function(data) {
 		gamestage = "waiting for word";
 		var slotposition = data.slotposition;
-		socket.emit('wait for word', {type: "ADJ", slotposition: slotposition, game: game});
-		socket.broadcast.emit('open word input', {type: "ADJ", slotposition: slotposition});
+		io.to('host').emit('wait for word', {type: "ADJ", slotposition: slotposition, game: game});
+		io.to('playing').emit('open word input', {type: "ADJ", slotposition: slotposition});
 	})
 
 	// Host clicked on a player submitted word, time to move on!
 	socket.on("choosen", function(data) {
-		gameRoutes.chooseWord(socket, game, data.choosenword, data.slotposition, host, gamestage);
+		gameRoutes.chooseWord(io, socket, game, data.choosenword, data.slotposition, host, gamestage);
 	})
 
 	// ++++++++++++++++++++++
@@ -161,19 +159,16 @@ io.sockets.on('connection', function (socket) {
 				socket.emit('wait for host');
 			}
 		} else {
-			console.log("No game");
-			socket.emit('reload lobby');
 			// No game in progress, rerender the home page
-
+			socket.emit('reload lobby');
 		}
 	})
+
+
 
 })
 
 app.get("/", gameRoutes.renderLobby);
-// app.get("/libs", dbRoutes.mongo);
-
-app.get("/:collection/:operation", dbRoutes.mongo);
 
 
 
