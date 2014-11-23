@@ -36,6 +36,7 @@ libModel.loadJSON(fs);
 
 // Variables kept track per app
 var game;
+var body = ""; // The lib's string body
 var host = null;
 
 // not started | initializing | waiting for word
@@ -99,31 +100,18 @@ io.sockets.on('connection', function (socket) {
 	socket.on('slot handler', function(data) {
 		gamestage = "waiting for word";
 		var slotposition = data.slotposition;
+		body = data.body;
 		switch (data.type) {
-			case 'NOUN': 	io.to('host').emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
+			case 'NOUN': 	io.to('host').emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game, body:body});
 							io.to('playing').emit('open word input', {type: "NOUN", slotposition: slotposition});
 							break;
-			case 'P_NOUN': 	io.to('host').emit('wait for word', {type: "PROPER NOUN", slotposition: slotposition, game: game});
+			case 'P_NOUN': 	io.to('host').emit('wait for word', {type: "PROPER NOUN", slotposition: slotposition, game: game, body:body});
 							io.to('playing').emit('open word input', {type: "PROPER NOUN", slotposition: slotposition});
 							break;
-			case 'ADJ': 	io.to('host').emit('wait for word', {type: "ADJECTIVE", slotposition: slotposition, game: game});
+			case 'ADJ': 	io.to('host').emit('wait for word', {type: "ADJECTIVE", slotposition: slotposition, game: game, body:body});
 							io.to('playing').emit('open word input', {type: "ADJECTIVE", slotposition: slotposition});
 							break;
 		}
-	})
-
-	socket.on('NOUN', function(data) {
-		gamestage = "waiting for word";
-		var slotposition = data.slotposition;
-		io.to('host').emit('wait for word', {type: "NOUN", slotposition: slotposition, game: game});
-		io.to('playing').emit('open word input', {type: "NOUN", slotposition: slotposition});
-	})
-
-	socket.on("ADJ", function(data) {
-		gamestage = "waiting for word";
-		var slotposition = data.slotposition;
-		io.to('host').emit('wait for word', {type: "ADJ", slotposition: slotposition, game: game});
-		io.to('playing').emit('open word input', {type: "ADJ", slotposition: slotposition});
 	})
 
 	// Host clicked on a player submitted word, time to move on!
@@ -149,7 +137,7 @@ io.sockets.on('connection', function (socket) {
 		gameRoutes.addWord(socket, game, data.word);
 		socket.emit('you submitted', {word: data.word});
 		// Below: Emit event JUST to the host, whose id /socket.id is known
-		io.to(host.getId()).emit('wait for word', {type: data.type, slotposition: data.slotposition, game:game});
+		io.to(host.getId()).emit('wait for word', {type: data.type, slotposition: data.slotposition, game:game, body:body});
 	}) 
 
 	// ++++++++++++++++++++++

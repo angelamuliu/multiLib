@@ -66,21 +66,25 @@ socket.on('render host view', function(data) {
 	$("div#record").empty();
 	$("div#record").append("<h3>" + data.game.name + "</h3>");
 	$("div#record").append("<p></p>");
+
+	var bodySoFar = ""; // Keep track of body while we go through it so we can pass it in later to another fn...
 	for (var i=0; i<data.game.lib_body.length; i++) {
 		var wordseg = data.game.lib_body[i];
 		if (wordseg[0] === "$") {
 			// Is a word slot, make button w/ id of type and position in lib array
 			$("div#record p").append("<button id=\""+ i + wordseg.slice(1) + "\" class=\"slot\"></button>");
 			$("div#record p button").last().append(wordseg.slice(1));
+			bodySoFar = bodySoFar + wordseg.slice(1);
 		} else {
-			$("div#record p").append(data.game.lib_body[i]);
+			$("div#record p").append(wordseg);
+			bodySoFar = bodySoFar + wordseg;
 		}
 	}
 	// Attach click handlers to the slot buttons, and sockets that relate to type of button
 	$("div#record button").click( function() {
 		var slotposition = $(this).attr('id')[0];
 		var type = $(this).attr('id').slice(1);
-		socket.emit('slot handler', {type: type, slotposition: slotposition});
+		socket.emit('slot handler', {type: type, slotposition: slotposition, body: bodySoFar});
 	})
 })
 
@@ -91,6 +95,8 @@ socket.on('wait for word', function(data) {
 	$("div#record").append("<p>Waiting for </p>");
 	$("div#record p").append("<h2>"+data.type+"</h2>");
 	$("div#record p").append(" words from players...");
+
+	$("div#record").append("<p>Story so far: "+data.body+"</p><hr />");
 
 	$("div#record").append("<div id=\"inputwords\">Words so far:<br /></div>");
 	if (data.game.players_words.length <1) {
