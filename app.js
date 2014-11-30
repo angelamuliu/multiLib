@@ -38,6 +38,7 @@ libModel.loadJSON(fs);
 var game;
 var body = ""; // The lib's string body
 var host = null;
+var hostname = "";
 
 // not started | initializing | waiting for word
 var gamestage = "not started";
@@ -70,20 +71,25 @@ io.sockets.on('connection', function (socket) {
 		socket.leave('host');
 		socket.join('playing');
 		host = null;
+		hostname = "";
 		game = null;
 		gamestage = "not started";
 	});
 
 	// A player has clicked a button to be host, update host and other player views
-	socket.on('set host', function() {
+	socket.on('set host', function(data) {
 		socket.join('host'); // Assign this socket to host
 		socket.leave('playing');
 		host = player;
 		gameRoutes.prepGame(socket, libModel.getAllLibs());
 		game = gameRoutes.createGame(socket, host);
-
-		io.to('playing').emit('wait for host');
 		gamestage = "initializing";
+		if (data.username) {
+			hostname = data.username;
+			io.to('playing').emit('wait for host', {hostname:hostname});
+		} else {
+			io.to('playing').emit('wait for host');
+		}
 	})
 
 	// Initialize game w/ host's chosen values, update views to main game view
@@ -91,7 +97,10 @@ io.sockets.on('connection', function (socket) {
 		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
 		console.log(game.players_words);
 		io.to('host').emit('render host view', {game: game});
-		io.to('playing').emit('render player view', {game: game});
+		if (hostname) { io.to('playing').emit('render player view', {game: game, hostname:hostname});
+		} else {
+			io.to('playing').emit('render player view', {game: game});
+		}
 	});
 
 	// ++++++++++++++++++++++
@@ -112,6 +121,9 @@ io.sockets.on('connection', function (socket) {
 			case 'ADJ': 	io.to('host').emit('wait for word', {type: "ADJECTIVE", slotposition: slotposition, game: game, body:body});
 							io.to('playing').emit('open word input', {type: "ADJECTIVE", slotposition: slotposition});
 							break;
+			case 'VERB': 	io.to('host').emit('wait for word', {type: "VERB", slotposition: slotposition, game: game, body:body});
+							io.to('playing').emit('open word input', {type: "VERB", slotposition: slotposition});
+							break;		
 		}
 	})
 

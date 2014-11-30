@@ -2,7 +2,7 @@
 var socket = io.connect('/');
 
 function setHost() {
-	socket.emit('set host');
+	socket.emit('set host', {username: localStorage.getItem("username")});
 }
 
 function viewLibs() {
@@ -121,9 +121,13 @@ socket.on('wait for word', function(data) {
 // -------------------------------------------------
 
 // PLAYER: A general waiting page for nonhost players, waiting for the host to make choices
-socket.on('wait for host', function() {
+socket.on('wait for host', function(data) {
 	$("div#record").empty();
-	$("div#record").append("<p>Waiting for host to setup game...</p>");
+	if (data.hostname) {
+		$("div#record").append("<p>Waiting for "+data.hostname+" to setup game...</p>");
+	} else {
+		$("div#record").append("<p>Waiting for host to setup game...</p>");
+	}
 	$("div#record p").append("<br /><i class=\"fa fa-spin fa-cog fa-3x\"></i>");
 
 })
@@ -132,7 +136,11 @@ socket.on('wait for host', function() {
 socket.on('render player view', function(data) {
 	$("div#record").empty();
 	$("div#record").append("<img class=\"slideUp roboimg\" src=\"images/robo_hostChooseLib.png\"/>");
-	$("div#record").append("<p>Waiting for host to select a word slot...Just wait a little longer.</p>");
+	if (data.hostname) {
+		$("div#record").append("<p>Waiting for "+data.hostname+" to select a word slot...Just wait a little longer.</p>");
+	} else {
+		$("div#record").append("<p>Waiting for host to select a word slot...Just wait a little longer.</p>");
+	}
 	$("div#record p").append("<br /><i class=\"fa fa-spin fa-cog fa-3x\"></i>");
 })
 
