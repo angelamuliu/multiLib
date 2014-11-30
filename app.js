@@ -48,6 +48,7 @@ io.sockets.on('connection', function (socket) {
 
 	// Socket rooms: playing, host, viewLib_room
 	socket.join('playing');
+	socket.emit('reload lobby');
 
 	// Disconnect automatically kicks the socket out of any rooms
 	socket.on('disconnect', function () {

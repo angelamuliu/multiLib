@@ -47,7 +47,7 @@ div#record {
 	padding:50px;
 	padding-top:75px;
 	text-align: center;
-	min-height:300px;
+	min-height:400px;
 }
 footer {
 	background-color: #A7A37E;
@@ -93,6 +93,19 @@ button.slot, button#start, button#submit_word, button.delete {
 	color: #D8D4A3;
 	padding:10px;
 	margin:3px;
+}
+
+div#home button.fitted {
+	width: auto;
+	background-color: #A7A37E;
+	font-size:10px;
+	height:24px;
+	position:relative;
+	top:-2px;
+}
+input[name=username] {
+	height: 20px;
+	border: 1px #A7A37E solid;
 }
 
 button.choosen {
@@ -165,6 +178,9 @@ button.choosen {
 	button#return {
 		max-width:400px;
 	}
+	input[name=username] {
+		width:40%;
+	}
 
 
 }
@@ -179,6 +195,9 @@ button.choosen {
 	}
 	img#robos {
 		display:none;
+	}
+	input[name=username] {
+		width:70%;
 	}
 
 

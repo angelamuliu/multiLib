@@ -13,10 +13,11 @@ function returnHome() {
 	socket.emit('leave libs');
 }
 
-// Just reloat the lobby
+// Just reload the lobby
 socket.on('reload lobby', function(data) {
 	$("div#record").empty();
 	$("div#record").append(homeNode);
+	userEnter();
 })
 
 // Update UI for connected players IF a game is reset due to disconnected 
@@ -25,6 +26,7 @@ socket.on('reset game', function(data) {
 	$("div#record").empty();
 	$("div#record").append("<div class=\"notif\">The game host disappeared! Sorry about that. Someone pick up the ball!</div>");
 	$("div#record").append(homeNode);
+	userEnter();
 })
 
 // A game has been completed
@@ -34,6 +36,7 @@ socket.on('finished game', function(data) {
 	$("div.completed").append("<h2>Check out the finished lib!</h2>");
 	$("div.completed").append("<p>"+data.completeLib+"</p>");
 	$("div#record").append(homeNode);
+	userEnter();
 	socket.emit('reset');
 })
 
