@@ -66,6 +66,7 @@ socket.on('setup game', function(data) {
 
 // HOST: Create the main mad lib game interface, host view
 socket.on('render host view', function(data) {
+	console.log("host view");
 	$("div#record").empty();
 	$("div#record").append("<h3>" + data.game.name + "</h3>");
 	$("div#record").append("<p></p>");
@@ -85,8 +86,8 @@ socket.on('render host view', function(data) {
 	}
 	// Attach click handlers to the slot buttons, and sockets that relate to type of button
 	$("div#record button").click( function() {
-		var slotposition = $(this).attr('id')[0];
-		var type = $(this).attr('id').slice(1);
+		var slotposition = $(this).attr('id').match(/\d*/); // parse out number
+		var type = $(this).attr('id').slice(1).replace(/\d/g, ""); // parse out any numbers
 		socket.emit('slot handler', {type: type, slotposition: slotposition, body: bodySoFar});
 	})
 })
@@ -123,7 +124,7 @@ socket.on('wait for word', function(data) {
 // PLAYER: A general waiting page for nonhost players, waiting for the host to make choices
 socket.on('wait for host', function(data) {
 	$("div#record").empty();
-	if (data.hostname) {
+	if (data) {
 		$("div#record").append("<p>Waiting for "+data.hostname+" to setup game...</p>");
 	} else {
 		$("div#record").append("<p>Waiting for host to setup game...</p>");

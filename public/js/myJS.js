@@ -31,9 +31,9 @@ function userEnter() {
 		})
 	} else {
 		// username has been set, but provide easy access to resetting
-		$("div#record h1").after("<p>Welcome back, " + username + "! </p>");
-		$("div#record p").first().append("<button class=\"fitted\"><i class=\"fa fa-undo\"></i></button>");
-		$("div#record p:first button").click(function() {
+		$("div#record h1").after("<p id=\"welcome\">Welcome back, " + username + "! </p>");
+		$("div#record p#welcome").append("<button class=\"fitted\"><i class=\"fa fa-undo\"></i></button>");
+		$("div#record p#welcome button").click(function() {
 			localStorage.setItem("username", "");
 			$("div#record p:first").remove();
 			userEnter();

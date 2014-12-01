@@ -95,7 +95,6 @@ io.sockets.on('connection', function (socket) {
 	// Initialize game w/ host's chosen values, update views to main game view
 	socket.on('Init Game', function(data) {
 		gameRoutes.initGame(socket, game, data.gamename, data.libId, host, playerCollection.getAllPlayers(), libModel.getAllLibs());
-		console.log(game.players_words);
 		io.to('host').emit('render host view', {game: game});
 		if (hostname) { io.to('playing').emit('render player view', {game: game, hostname:hostname});
 		} else {
@@ -138,7 +137,6 @@ io.sockets.on('connection', function (socket) {
 
 	// For players who enter in the middle of a game ...
 	if (player !== host && host !== null) {
-		console.log(host);
 		if (gamestage = "initializing") {
 			socket.emit('wait for host');
 		} else if (gamestage = "waiting for word") {
@@ -170,11 +168,12 @@ io.sockets.on('connection', function (socket) {
 		socket.join('playing');
 		// Game in progress, render a waiting view
 		if (player !== host && host !== null) {
-			console.log("in progress");
-			if (gamestage = "initializing") {
-				socket.emit('wait for host');
-			} else if (gamestage = "waiting for word") {
-				socket.emit('wait for host');
+			if (gamestage === "initializing" || gamestage === "waiting for word") {
+				if (hostname) {
+					socket.emit('wait for host', {hostname: hostname});
+				} else {
+					socket.emit('wait for host');
+				}
 			}
 		} else {
 			// No game in progress, rerender the home page

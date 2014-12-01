@@ -3,21 +3,44 @@
 	[
 		{
 			"id": 0,
-			"title": "Test madlib",
+			"title": "CMU Struggle",
 			"body": 
-				["This is a test mad lib. It is very ", 
+				["After a ", 
 				"$ADJ",
-				" strangely structured. I really love ",
-				"$NOUN" ]
+				" school year, all the students are ready for a ",
+				"$NOUN",
+				". Pittsburgh has become a ",
+				"$ADJ",
+				" ",
+				"$NOUN",
+				" and, for one last time, the students must ",
+				"$VERB",
+				" in preparation for the ",
+				"$ADJ",
+				" final exams. In truth, everyone would much rather ",
+				"$VERB",
+				" sitcoms and stuff their faces full of ",
+				"$ADJ",
+				" food." ]
 		},
 
 		{
 			"id": 1,
-			"title": "Test 2",
+			"title": "Let it Snow",
 			"body": 
-				["Strange, how ",
-				"$P_NOUN",
-				" work!"]
+				["Oh the weather outside is ",
+				"$ADJ",
+				". But the ",
+				"$NOUN",
+				" is so ",
+				"$ADJ",
+				". And since we've no place to go,  let it ",
+				"$VERB",
+				", let it ",
+				"$VERB",
+				", let it ",
+				"$VERB",
+				"!"]
 		}
 	]
 }
