@@ -106,6 +106,8 @@ io.sockets.on('connection', function (socket) {
 	// HOST sockets
 	// ++++++++++++++++++++++
 
+	// Used to respond to when host presses a word slot. This makes sure that the position the slot is associated with is
+	// properly filled, and also has word type information to pass to everyone so people know what to submit
 	socket.on('slot handler', function(data) {
 		gamestage = "waiting for word";
 		var slotposition = data.slotposition;

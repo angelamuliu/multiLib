@@ -119,6 +119,9 @@ button.choosen {
 	padding:5px;
 	margin:5px;
 }
+a {
+	color:white;
+}
 
 /* CSS Animation */
 .slideUp {
