@@ -9,7 +9,7 @@ app.use(morgan('tiny'));
 
 // Other modules
 var fs = require('fs');
-console.log("Modules done");
+
 // -------------------------------------------------
 
 // Set view directory
@@ -30,7 +30,7 @@ httpServer.listen(port, ipaddress, function() {console.log('Node server started 
 
 // -------------------------------------------------
 // ROUTES / SOCKETIO
-console.log("Attempt load");
+
 var libModel = require('./models/lib.js');
 var gameRoutes = require('./routes/gameRoutes.js');
 var playerCollection = require('./models/playercollection.js');
@@ -38,7 +38,7 @@ var playerCollection = require('./models/playercollection.js');
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
 // Initialize mongoDB
-console.log("Attept");
+
 gameRoutes.mongoinit();
 
 // Variables kept track per app
