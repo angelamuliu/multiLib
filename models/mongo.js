@@ -9,6 +9,7 @@ console.log(process.env.OPENSHIFT_APP_NAME);
 
 // Set up connections to mongo and initialize the DB
 exports.mongoinit = function() {
+	console.log("Init attempt");
 	// if openshift env variables are present, we need to connect to Openshift's mongo
 	// end result: 'mongodb://user:password@host:port/app_name' 
 	if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
