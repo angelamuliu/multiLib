@@ -8,7 +8,7 @@ var url = 'mongodb://127.0.0.1:27017/libs'; // Default to localhost connection
 console.log(process.env.OPENSHIFT_APP_NAME);
 
 // Set up connections to mongo and initialize the DB
-exports.mongoinit = function(process) {
+exports.mongoinit = function() {
 	// if openshift env variables are present, we need to connect to Openshift's mongo
 	// end result: 'mongodb://user:password@host:port/app_name' 
 	if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){

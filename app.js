@@ -37,6 +37,8 @@ var playerCollection = require('./models/playercollection.js');
 
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
+// Initialize mongoDB
+gameRoutes.mongoinit();
 
 // Variables kept track per app
 var game;

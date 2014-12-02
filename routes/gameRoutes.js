@@ -7,6 +7,10 @@ exports.renderLobby = function(req, res) {
 	res.render("game/game_lobby");
 }
 
+exports.mongoinit = function() {
+	mongo.mongoinit();
+}
+
 exports.renderMongo = function(socket) {
 	mongo.find( function(libs) {
 		socket.emit('libs done', {libs: libs});
