@@ -1,45 +1,31 @@
 var util = require("util");
 var mongoClient = require('mongodb').MongoClient;
 var BSON = require('mongodb').BSONPure; // Used to locate docs by doc id
+var mongoDB; // The database
 
-/*
- * This is the connection URL
- * Give the IP Address / Domain Name (else localhost)
- * The typical mongodb port is 27012
- * The path part (here "fallTest") is the name of the databas
- */
+var url = 'mongodb://127.0.0.1:27017/libs'; // Default to localhost connection
 
+console.log(process.env.OPENSHIFT_APP_NAME);
 
- // Default to localhost connection
-var url = 'mongodb://127.0.0.1:27017/libs';
-
-// if openshift env variables are present, we need to connect to Openshift's mongo
-// end result: 'mongodb://user:password@host:port/app_name' 
-if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
-  url = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
-  process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
-  process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
-  process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
-  process.env.OPENSHIFT_APP_NAME;
+// Set up connections to mongo and initialize the DB
+exports.mongoinit = function(process) {
+	// if openshift env variables are present, we need to connect to Openshift's mongo
+	// end result: 'mongodb://user:password@host:port/app_name' 
+	if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+		url = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+		process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+		process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+		process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+		process.env.OPENSHIFT_APP_NAME;
+	}
+	console.log(url);
+	// Use connect method to connect to the Server
+	mongoClient.connect(url, function(err, db) {
+  		if (err) doError(err);
+  		console.log("Connected correctly to server");
+  		mongoDB = db;
+	});
 }
-
-console.log(url);
-
-var mongoDB; // The connected database
-
-// Use connect method to connect to the Server
-mongoClient.connect(url, function(err, db) {
-  if (err) doError(err);
-  console.log("Connected correctly to server");
-  mongoDB = db;
-});
-
-/* 
- * In the methods below, notice the use of a callback argument,
- * how that callback function is called, and the argument it is given.
- * Why can't the insert, find, and update functions just return the
- * data directly?
- */
 
 // INSERT a lib into the db
 exports.insert = function(game_name, lib_str, template_name, callback) {

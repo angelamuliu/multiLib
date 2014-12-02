@@ -22,7 +22,11 @@ app.use(express.static(__dirname + '/public'));
 // Hook up socket io
 var httpServer = http.Server(app);
 var io = sio(httpServer);
-httpServer.listen(50000, function() {console.log('Listening on 50000');});
+
+// Start server, default to localhost if openshift not found
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 50000;
+httpServer.listen(port, ipaddress, function() {console.log('Node server started on %s:%d', ipaddress, port);});
 
 // -------------------------------------------------
 // ROUTES / SOCKETIO
