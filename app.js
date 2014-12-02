@@ -9,7 +9,7 @@ app.use(morgan('tiny'));
 
 // Other modules
 var fs = require('fs');
-
+console.log("Modules done");
 // -------------------------------------------------
 
 // Set view directory
