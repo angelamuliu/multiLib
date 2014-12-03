@@ -1,5 +1,6 @@
 
-var socket = io.connect('/');
+// Connect client to port 8000, that's where openshift has websockets enabled
+var socket = io.connect(':8000/');
 
 function setHost() {
 	socket.emit('set host', {username: localStorage.getItem("username")});

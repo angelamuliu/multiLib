@@ -25,8 +25,9 @@ var io = sio(httpServer);
 
 // Start server, default to localhost if openshift not found
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
-var port = process.env.OPENSHIFT_NODEJS_PORT || 50000;
+var port = process.env.OPENSHIFT_INTERNAL_PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000;
 httpServer.listen(port, ipaddress, function() {console.log('Node server started on %s:%d', ipaddress, port);});
+
 
 // -------------------------------------------------
 // ROUTES / SOCKETIO
@@ -38,7 +39,6 @@ var playerCollection = require('./models/playercollection.js');
 // Load in the lib templates from the JSON file once when server starts
 libModel.loadJSON(fs);
 // Initialize mongoDB
-
 gameRoutes.mongoinit();
 
 // Variables kept track per app
@@ -60,9 +60,11 @@ io.sockets.on('connection', function (socket) {
 
 	// Disconnect automatically kicks the socket out of any rooms
 	socket.on('disconnect', function () {
+		console.log("disconnected");
 		playerCollection.deletePlayer(player);
 		if (host === player) {
 			host = null;
+			hostname = "";
 			game = null;
 			gamestage = "not started";
 			io.to('playing').emit('reset game');

@@ -16,7 +16,7 @@ exports.mongoinit = function() {
 		process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
 		process.env.OPENSHIFT_APP_NAME + '/libs';
 	}
-	console.log(url);
+	console.log("MongoDB: " + url);
 	// Use connect method to connect to the Server
 	mongoClient.connect(url, function(err, db) {
   		if (err) doError(err);
